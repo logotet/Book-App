@@ -44,6 +44,11 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
 
+    // Ktor
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.bundles.ktor)
+//    implementation(libs.ktor.client.darwin)
+
     // Koin
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)

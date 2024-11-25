@@ -7,18 +7,23 @@ sealed interface DataResult<out D, out E : AppError> {
 }
 
 sealed class DataError(val throwable: Throwable?) : AppError {
-    sealed class RemoteError(throwable: Throwable?) : DataError(throwable) {
-        class Timeout(throwable: Throwable?) : RemoteError(throwable)
-        class NoInternet(throwable: Throwable?) : RemoteError(throwable)
-        class Server(throwable: Throwable?) : RemoteError(throwable)
-        class Serialization(throwable: Throwable?) : RemoteError(throwable)
-        class Unknown(throwable: Throwable? = null) : LocalError(throwable)
+    sealed class Remote(throwable: Throwable?) : DataError(throwable) {
+        class Redirect(throwable: Throwable?) : Remote(throwable)
+        class BadRequest(throwable: Throwable?) : Remote(throwable)
+        class Server(throwable: Throwable?) : Remote(throwable)
+        class Unauthorized(throwable: Throwable?) : Remote(throwable)
+        class Forbidden(throwable: Throwable?) : Remote(throwable)
+        class NotFound(throwable: Throwable?) : Remote(throwable)
+        class MethodNotAllowed(throwable: Throwable?) : Remote(throwable)
+        class Timeout(throwable: Throwable?) : Remote(throwable)
+        class Serialization(throwable: Throwable?) : Remote(throwable)
+        class Unknown(throwable: Throwable? = null) : Remote(throwable)
     }
 
-    sealed class LocalError(throwable: Throwable?) : DataError(throwable) {
-        class Insert(throwable: Throwable?) : LocalError(throwable)
-        class Update(throwable: Throwable?) : LocalError(throwable)
-        class GetData(throwable: Throwable?) : LocalError(throwable)
-        class Unknown(throwable: Throwable? = null) : LocalError(throwable)
+    sealed class Local(throwable: Throwable?) : DataError(throwable) {
+        class Insert(throwable: Throwable?) : Local(throwable)
+        class Update(throwable: Throwable?) : Local(throwable)
+        class GetData(throwable: Throwable?) : Local(throwable)
+        class Unknown(throwable: Throwable? = null) : Local(throwable)
     }
 }
