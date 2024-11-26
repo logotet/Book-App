@@ -1,4 +1,4 @@
-package com.logotet.bookapp.android.book.data.dto
+package com.logotet.bookapp.android.book.data.network.dto
 
 import kotlinx.serialization.Serializable
 
