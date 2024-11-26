@@ -1,10 +1,12 @@
 package com.logotet.bookapp.android.book.data
 
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
-import com.logotet.bookapp.android.book.data.network.mapper.mapSuccess
+import com.logotet.bookapp.android.book.data.network.mapper.toBookDetails
+import com.logotet.bookapp.android.core.domain.result.mapSuccess
 import com.logotet.bookapp.android.book.data.network.mapper.toBookList
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
+import com.logotet.bookapp.android.book.domain.model.BookDetails
 import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,15 @@ class DefaultBookRepository(
         remoteBookDataSource.searchBooks(query)
             .mapSuccess { bookItemsDto ->
                 bookItemsDto.toBookList()
+            }
+            .flowOn(Dispatchers.IO)
+
+    override suspend fun getBookDetails(
+        bookId: String
+    ): Flow<DataResult<BookDetails, DataError.Remote>> =
+        remoteBookDataSource.getBookDetails(bookId)
+            .mapSuccess { bookDetailsDto ->
+                bookDetailsDto.toBookDetails()
             }
             .flowOn(Dispatchers.IO)
 }
