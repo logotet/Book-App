@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class BookListViewModel(
     private val bookRepository: DefaultBookRepository
 ) : ViewModel() {
     sealed interface HomeScreenState {
