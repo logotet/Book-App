@@ -3,6 +3,8 @@ package com.logotet.bookapp.android.di
 import android.util.Log
 import com.logotet.bookapp.android.book.data.network.KtorRemoteBookDataSource
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
+import com.logotet.bookapp.android.book.domain.BookRepository
+import com.logotet.bookapp.android.book.domain.DefaultBookRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -19,7 +21,7 @@ private const val HTTP_LOGGER_TAG = "KTOR"
 private const val TIMEOUT_MILLIS = 30000L
 
 val appModule = module {
-
+    singleOf(::DefaultBookRepository).bind<BookRepository>()
 }
 
 val networkModule = module {
