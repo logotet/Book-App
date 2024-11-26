@@ -1,7 +1,5 @@
-package com.logotet.bookapp.android.book.data.network.mapper
+package com.logotet.bookapp.android.core.domain.result
 
-import com.logotet.bookapp.android.core.domain.result.DataError
-import com.logotet.bookapp.android.core.domain.result.DataResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
