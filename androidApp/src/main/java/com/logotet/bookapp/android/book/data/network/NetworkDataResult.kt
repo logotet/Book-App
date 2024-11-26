@@ -10,15 +10,22 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.JsonConvertException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.SerializationException
 
 suspend inline fun <reified Data> makeRequest(
-    execute: suspend () -> HttpResponse
-): DataResult<Data, DataError.Remote> {
-    return try {
-        val response = execute()
-        DataResult.Success(response.body<Data>())
-    } catch (e: Exception) {
-        parseError(e)
+    crossinline execute: suspend () -> HttpResponse
+): Flow<DataResult<Data, DataError.Remote>> {
+    return flow {
+        emit(DataResult.Loading)
+
+        try {
+            val response = execute()
+            emit(DataResult.Success(response.body<Data>()))
+        } catch (e: Exception) {
+            emit(parseError(e))
+        }
     }
 }
 

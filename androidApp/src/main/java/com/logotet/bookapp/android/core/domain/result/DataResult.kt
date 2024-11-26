@@ -1,6 +1,7 @@
 package com.logotet.bookapp.android.core.domain.result
 
 sealed interface DataResult<out D, out E : AppError> {
+    data object Loading : DataResult<Nothing, Nothing>
     data class Success<D>(val data: D) : DataResult<D, Nothing>
     data class Error<E : AppError>(val error: E) :
         DataResult<Nothing, E>
