@@ -2,9 +2,8 @@ package com.logotet.bookapp.android.book.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.logotet.bookapp.android.book.domain.DefaultBookRepository
+import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
-import com.logotet.bookapp.android.core.domain.result.AppError
 import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import kotlinx.coroutines.flow.MutableStateFlow

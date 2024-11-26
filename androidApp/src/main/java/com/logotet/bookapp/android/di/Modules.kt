@@ -4,7 +4,7 @@ import android.util.Log
 import com.logotet.bookapp.android.book.data.network.KtorRemoteBookDataSource
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.android.book.domain.BookRepository
-import com.logotet.bookapp.android.book.domain.DefaultBookRepository
+import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.presentation.HomeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout

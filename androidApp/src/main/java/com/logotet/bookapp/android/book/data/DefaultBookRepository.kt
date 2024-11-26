@@ -1,8 +1,9 @@
-package com.logotet.bookapp.android.book.domain
+package com.logotet.bookapp.android.book.data
 
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.android.book.data.network.mapper.mapSuccess
 import com.logotet.bookapp.android.book.data.network.mapper.toBookList
+import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
 import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
