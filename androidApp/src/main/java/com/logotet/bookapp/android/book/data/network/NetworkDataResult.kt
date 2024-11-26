@@ -40,7 +40,7 @@ fun parseError(throwable: Throwable?): DataResult<Nothing, DataError.Remote> =
             // for 5xx responses
             is ServerResponseException -> DataError.Remote.Server(throwable)
             // for deserialization errors
-            is JsonConvertException -> DataError.Remote.Serialization(throwable)
+            is JsonConvertException, is SerializationException -> DataError.Remote.Serialization(throwable)
             // for timeout errors
             is HttpRequestTimeoutException -> DataError.Remote.Timeout(throwable)
             // for any other errors

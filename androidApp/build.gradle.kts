@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -47,7 +49,6 @@ dependencies {
     // Ktor
     implementation(libs.ktor.client.okhttp)
     implementation(libs.bundles.ktor)
-//    implementation(libs.ktor.client.darwin)
 
     // Koin
     implementation(libs.koin.android)
@@ -56,5 +57,4 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     api(libs.koin.core)
-
 }
