@@ -5,6 +5,7 @@ import com.logotet.bookapp.android.book.data.network.KtorRemoteBookDataSource
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.DefaultBookRepository
+import com.logotet.bookapp.android.book.presentation.HomeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -14,6 +15,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -21,6 +23,7 @@ private const val HTTP_LOGGER_TAG = "KTOR"
 private const val TIMEOUT_MILLIS = 30000L
 
 val appModule = module {
+    viewModelOf(::HomeViewModel)
     singleOf(::DefaultBookRepository).bind<BookRepository>()
 }
 
