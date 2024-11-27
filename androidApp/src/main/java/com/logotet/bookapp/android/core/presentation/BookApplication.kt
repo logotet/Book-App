@@ -1,4 +1,4 @@
-package com.logotet.bookapp.android
+package com.logotet.bookapp.android.core.presentation
 
 import android.app.Application
 import com.logotet.bookapp.android.di.appModule

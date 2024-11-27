@@ -57,4 +57,8 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     api(libs.koin.core)
+
+    // Navigation
+    implementation(libs.jetbrains.compose.navigation)
+    implementation(libs.kotlinx.serialization.json)
 }
