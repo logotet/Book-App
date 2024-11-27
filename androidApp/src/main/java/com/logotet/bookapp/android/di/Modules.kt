@@ -5,7 +5,8 @@ import com.logotet.bookapp.android.book.data.network.KtorRemoteBookDataSource
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.data.DefaultBookRepository
-import com.logotet.bookapp.android.book.presentation.BookListViewModel
+import com.logotet.bookapp.android.book.presentation.list.BookListViewModel
+import com.logotet.bookapp.android.book.presentation.details.BookDetailsViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -24,6 +25,7 @@ private const val TIMEOUT_MILLIS = 30000L
 
 val appModule = module {
     viewModelOf(::BookListViewModel)
+    viewModelOf(::BookDetailsViewModel)
     singleOf(::DefaultBookRepository).bind<BookRepository>()
 }
 
