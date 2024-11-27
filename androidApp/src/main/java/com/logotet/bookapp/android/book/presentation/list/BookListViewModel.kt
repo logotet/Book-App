@@ -1,33 +1,19 @@
-package com.logotet.bookapp.android.book.presentation
+package com.logotet.bookapp.android.book.presentation.list
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
-import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.logotet.bookapp.android.core.presentation.BaseViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class BookListViewModel(
     private val bookRepository: DefaultBookRepository
-) : ViewModel() {
-    sealed interface HomeScreenState {
-        data object Loading : HomeScreenState
-        data class Success(val books: List<Book>) : HomeScreenState
-        data class Error(val error: DataError) : HomeScreenState
-    }
-
+) : BaseViewModel<List<Book>>() {
     sealed interface HomeScreenAction {
         data class Search(val query: String) : HomeScreenAction
     }
-
-    private val _state: MutableStateFlow<HomeScreenState> =
-        MutableStateFlow(HomeScreenState.Loading)
-    val state: StateFlow<HomeScreenState> = _state.asStateFlow()
 
     private fun getBooksList(query: String) {
         viewModelScope.launch {
@@ -35,15 +21,15 @@ class BookListViewModel(
                 .collectLatest { result ->
                     when (result) {
                         is DataResult.Loading -> {
-                            _state.value = HomeScreenState.Loading
+                            _state.value = ScreenState.Loading
                         }
 
                         is DataResult.Success -> {
-                            _state.value = HomeScreenState.Success(result.data)
+                            _state.value = ScreenState.Success(result.data)
                         }
 
                         is DataResult.Error -> {
-                            _state.value = HomeScreenState.Error(result.error)
+                            _state.value = ScreenState.Error(result.error)
                         }
                     }
                 }
