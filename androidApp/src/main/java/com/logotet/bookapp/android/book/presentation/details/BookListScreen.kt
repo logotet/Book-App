@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.logotet.bookapp.android.book.presentation.details
 
 import android.util.Log
@@ -7,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,6 +15,7 @@ import com.logotet.bookapp.android.book.presentation.list.composables.BookListIt
 import com.logotet.bookapp.android.book.presentation.list.composables.SearchBar
 import com.logotet.bookapp.android.book.presentation.list.composables.TabRow
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import com.logotet.bookapp.android.core.presentation.composable.rememberCoilImagePainter
 
 private const val EMPTY_STRING = ""
 
@@ -42,7 +40,7 @@ fun BookListScreen(
             )
         }
 
-        is BaseViewModel.ScreenState.Error -> { }
+        is BaseViewModel.ScreenState.Error -> {}
     }
 
 }
@@ -70,10 +68,14 @@ fun BookListContent(
 
         LazyColumn {
             items(books) { book ->
+                val authorName = book.authors.firstOrNull() ?: EMPTY_STRING
+                val bookPainter = rememberCoilImagePainter(book.imageUrl)
+
                 BookListItemCard(
                     bookTitle = book.title,
-                    authorName = book.authors.firstOrNull() ?: EMPTY_STRING,
+                    authorName = authorName,
                     bookRating = book.averageRating,
+                    bookCoverPainter = bookPainter,
                     navigate = { navigateToBookDetails(book.id) }
                 )
             }

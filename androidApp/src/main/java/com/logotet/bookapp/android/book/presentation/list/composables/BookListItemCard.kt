@@ -1,5 +1,6 @@
 package com.logotet.bookapp.android.book.presentation.list.composables
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -21,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.logotet.bookapp.android.R
 import com.logotet.bookapp.android.core.presentation.theme.AppTheme
 import com.logotet.bookapp.android.core.presentation.theme.Dimensions
 
@@ -42,7 +44,7 @@ fun BookListItemCard(
     bookTitle: String,
     authorName: String,
     bookRating: Double?,
-    bookCoverIcon: ImageVector = Icons.Default.AccountCircle,
+    bookCoverPainter: Painter,
     navigate: () -> Unit
 ) {
     Row(
@@ -55,14 +57,14 @@ fun BookListItemCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Icon(
-            imageVector = bookCoverIcon,
+        Image(
+            painter = bookCoverPainter,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxHeight()
                 .width(bookCoverWidth)
                 .weight(BOOK_COVER_WEIGHT)
-                .padding(Dimensions.Spacing.small)
+                .padding(Dimensions.Spacing.medium)
         )
 
         Column(
@@ -96,8 +98,7 @@ fun BookListItemCard(
         }
 
         IconButton(
-            content =
-            {
+            content = {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowRight,
                     contentDescription = null,
@@ -120,6 +121,7 @@ fun BookListItemPreview() {
             bookTitle = "Harry Potter",
             authorName = "J.K. Rowling",
             bookRating = 4.3,
+            bookCoverPainter = painterResource(R.drawable.image_book_cover_placeholder),
             navigate = {}
         )
     }
