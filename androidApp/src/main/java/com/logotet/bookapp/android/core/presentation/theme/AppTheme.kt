@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 private val lightColors = lightColorScheme(
     primary = DarkBlue,
     primaryContainer = DesertWhite,
+    secondaryContainer = Gevser,
     secondary = LightBlue,
     tertiary = SandYellow,
     background = DesertWhite,
@@ -22,6 +23,7 @@ fun AppTheme(
     MaterialTheme(
         colorScheme = lightColors,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }
