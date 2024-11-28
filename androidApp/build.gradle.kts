@@ -61,4 +61,7 @@ dependencies {
     // Navigation
     implementation(libs.jetbrains.compose.navigation)
     implementation(libs.kotlinx.serialization.json)
+
+    // Coil
+    implementation(libs.bundles.coil)
 }
