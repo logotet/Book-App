@@ -15,6 +15,7 @@ import com.logotet.bookapp.android.book.presentation.list.composables.BookListIt
 import com.logotet.bookapp.android.book.presentation.list.composables.SearchBar
 import com.logotet.bookapp.android.book.presentation.list.composables.TabRow
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import com.logotet.bookapp.android.core.presentation.composable.ProgressIndicator
 import com.logotet.bookapp.android.core.presentation.composable.rememberCoilImagePainter
 
 private const val EMPTY_STRING = ""
@@ -27,7 +28,10 @@ fun BookListScreen(
     val bookListState by viewModel.state.collectAsState()
 
     when (val currentState = bookListState) {
-        is BaseViewModel.ScreenState.Loading -> {}
+        is BaseViewModel.ScreenState.Loading -> {
+            ProgressIndicator()
+        }
+
         is BaseViewModel.ScreenState.Success -> {
             BookListContent(
                 books = currentState.data,
