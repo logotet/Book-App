@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 class BookListViewModel(
     private val bookRepository: DefaultBookRepository
 ) : BaseViewModel<List<Book>>() {
-    sealed interface HomeScreenAction {
-        data class Search(val query: String) : HomeScreenAction
+    sealed interface BookListScreenAction {
+        data class Search(val query: String) : BookListScreenAction
     }
 
     private fun getBooksList(query: String) {
@@ -36,9 +36,9 @@ class BookListViewModel(
         }
     }
 
-    fun onAction(action: HomeScreenAction) {
+    fun onAction(action: BookListScreenAction) {
         when (action) {
-            is HomeScreenAction.Search -> {
+            is BookListScreenAction.Search -> {
                 getBooksList(action.query)
             }
         }
