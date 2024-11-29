@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    // Book List Screen
+    <string name="tab_book_list_all">All Books</string>
+    <string name="tab_book_list_favorite">Favorite Books</string>
+    <string name="no_books_message">No Books Found</string>
+
     // Remote error messages
     <string name="remote_error_unknown">Oops, something went wrong.</string>
     <string name="remote_error_authorization">Authorization failed.</string>

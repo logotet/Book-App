@@ -35,6 +35,7 @@ private val searchBarHeight = 50.dp
 @Composable
 fun SearchBar(
     search: (String) -> Unit,
+    dismissSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var query by remember { mutableStateOf(EMPTY_STRING) }
@@ -56,7 +57,8 @@ fun SearchBar(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { query = EMPTY_STRING },
+                    onClick = { query = EMPTY_STRING
+                              dismissSearch()},
                     content = {
                         Icon(imageVector = Icons.Default.Clear, contentDescription = null)
                     }
@@ -80,6 +82,6 @@ fun SearchBar(
 @Composable
 fun SearchBarPreview() {
     AppTheme {
-        SearchBar(search = {})
+        SearchBar(search = {}, dismissSearch = {})
     }
 }

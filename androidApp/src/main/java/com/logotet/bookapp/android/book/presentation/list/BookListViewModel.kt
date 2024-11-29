@@ -5,6 +5,8 @@ import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -17,7 +19,39 @@ class BookListViewModel(
         data object TabChange : BookListScreenAction
     }
 
-    private fun getBooksList(query: String) {
+    enum class TabState {
+        ALL_BOOKS,
+        FAVORITE_BOOKS
+    }
+
+    private var _tabState = MutableStateFlow(TabState.ALL_BOOKS)
+    val tabState = _tabState.asStateFlow()
+
+    fun onAction(action: BookListScreenAction) {
+        when (action) {
+            is BookListScreenAction.Search -> {
+                getBooksByQuery(action.query)
+            }
+
+            is BookListScreenAction.DismissSearch -> {
+                _state.value = ScreenState.Idle
+            }
+
+            is BookListScreenAction.TabChange -> {
+                toggleTab()
+                getBooks()
+            }
+        }
+    }
+
+    private fun getBooks() {
+        when (_tabState.value) {
+            TabState.ALL_BOOKS -> getBooksByQuery("kotlin")
+            TabState.FAVORITE_BOOKS -> getBooksByQuery("Harry Potter")
+        }
+    }
+
+    private fun getBooksByQuery(query: String) {
         viewModelScope.launch {
             bookRepository.getBooksList(query)
                 .collectLatest { result ->
@@ -38,11 +72,10 @@ class BookListViewModel(
         }
     }
 
-    fun onAction(action: BookListScreenAction) {
-        when (action) {
-            is BookListScreenAction.Search -> {
-                getBooksList(action.query)
-            }
+    private fun toggleTab() {
+        when (_tabState.value) {
+            TabState.ALL_BOOKS -> _tabState.value = TabState.FAVORITE_BOOKS
+            TabState.FAVORITE_BOOKS -> _tabState.value = TabState.ALL_BOOKS
         }
     }
 }
