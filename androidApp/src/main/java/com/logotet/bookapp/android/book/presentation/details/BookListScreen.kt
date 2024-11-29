@@ -27,24 +27,16 @@ fun BookListScreen(
 ) {
     val bookListState by viewModel.state.collectAsState()
 
-    when (val currentState = bookListState) {
-        is BaseViewModel.ScreenState.Loading -> {
-            ProgressIndicator()
-        }
-
-        is BaseViewModel.ScreenState.Success -> {
-            BookListContent(
-                books = currentState.data,
-                onSearch = { query ->
-                    viewModel.onAction(BookListViewModel.BookListScreenAction.Search(query))
-                },
-                navigateToBookDetails = { bookId ->
-                    navigateToBookDetails(bookId)
-                }
-            )
-        }
-
-        is BaseViewModel.ScreenState.Error -> {}
+    ScreenScaffold(uiState = bookListState) { bookList ->
+        BookListContent(
+            books = bookList ?: emptyList(),
+            onSearch = { query ->
+                viewModel.onAction(BookListViewModel.BookListScreenAction.Search(query))
+            },
+            navigateToBookDetails = { bookId ->
+                navigateToBookDetails(bookId)
+            }
+        )
     }
 
 }
