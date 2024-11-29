@@ -13,6 +13,8 @@ class BookListViewModel(
 ) : BaseViewModel<List<Book>>() {
     sealed interface BookListScreenAction {
         data class Search(val query: String) : BookListScreenAction
+        data object DismissSearch : BookListScreenAction
+        data object TabChange : BookListScreenAction
     }
 
     private fun getBooksList(query: String) {

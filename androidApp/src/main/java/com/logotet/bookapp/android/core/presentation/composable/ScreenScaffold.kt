@@ -50,6 +50,8 @@ fun <T : Any?> ScreenScaffold(
             }
 
             when (uiState) {
+                is BaseViewModel.ScreenState.Idle -> {}
+
                 is BaseViewModel.ScreenState.Loading -> {
                     isLoading = true
                 }
