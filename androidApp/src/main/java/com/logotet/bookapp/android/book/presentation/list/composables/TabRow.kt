@@ -5,7 +5,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -15,17 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.logotet.bookapp.android.core.presentation.theme.AppTheme
 
-private const val INITIAL_INDEX = 0
-private const val ALL_BOOKS = "All Books"
-private const val FAVORITE_BOOKS = "Favorite Books"
-
 @Composable
 fun TabRow(
     modifier: Modifier = Modifier,
-    onTabChange: (Int) -> Unit,
+    tabs: List<String>,
+    selectedTabIndex: Int,
+    onTabChange: (Int) -> Unit
 ) {
-    val tabs: List<String> = listOf(ALL_BOOKS, FAVORITE_BOOKS)
-    var tabIndex by remember { mutableIntStateOf(INITIAL_INDEX) }
+    var tabIndex by remember { mutableIntStateOf(selectedTabIndex) }
 
     TabRow(
         selectedTabIndex = tabIndex,
@@ -51,6 +47,10 @@ fun TabRow(
 @Composable
 fun TabsRowPreview() {
     AppTheme {
-        TabRow {}
+        TabRow (
+            tabs = listOf("All", "Favorite"),
+            selectedTabIndex = 0,
+            onTabChange = {}
+        )
     }
 }
