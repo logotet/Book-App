@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.room)
+    id("kotlin-kapt")
 }
 
 android {
@@ -36,6 +38,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -64,4 +70,9 @@ dependencies {
 
     // Coil
     implementation(libs.bundles.coil)
+
+    // Room
+    implementation(libs.sqlite.bundled)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
 }
