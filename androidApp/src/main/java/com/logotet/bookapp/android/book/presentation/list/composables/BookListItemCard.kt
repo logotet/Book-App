@@ -2,6 +2,7 @@ package com.logotet.bookapp.android.book.presentation.list.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +53,8 @@ fun BookListItemCard(
             .clip(MaterialTheme.shapes.medium)
             .fillMaxWidth()
             .height(cardHeight)
-            .background(MaterialTheme.colorScheme.secondaryContainer),
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .clickable { navigate() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -97,18 +98,13 @@ fun BookListItemCard(
             }
         }
 
-        IconButton(
-            content = {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowRight,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(arrowHeight)
-                        .weight(NAVIGATION_ARROW_WEIGHT)
-                        .padding(Dimensions.Spacing.small)
-                )
-            },
-            onClick = navigate
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowRight,
+            contentDescription = null,
+            modifier = Modifier
+                .height(arrowHeight)
+                .weight(NAVIGATION_ARROW_WEIGHT)
+                .padding(Dimensions.Spacing.small)
         )
     }
 }
