@@ -17,10 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -34,11 +30,12 @@ private val searchBarHeight = 50.dp
 
 @Composable
 fun SearchBar(
+    initialQuery: String,
     search: (String) -> Unit,
     dismissSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var query by remember { mutableStateOf(EMPTY_STRING) }
+    var query = initialQuery
 
     Row(
         modifier = modifier
@@ -57,8 +54,10 @@ fun SearchBar(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { query = EMPTY_STRING
-                              dismissSearch()},
+                    onClick = {
+                        query = EMPTY_STRING
+                        dismissSearch()
+                    },
                     content = {
                         Icon(imageVector = Icons.Default.Clear, contentDescription = null)
                     }
@@ -82,6 +81,10 @@ fun SearchBar(
 @Composable
 fun SearchBarPreview() {
     AppTheme {
-        SearchBar(search = {}, dismissSearch = {})
+        SearchBar(
+            initialQuery = EMPTY_STRING,
+            search = {},
+            dismissSearch = {}
+        )
     }
 }

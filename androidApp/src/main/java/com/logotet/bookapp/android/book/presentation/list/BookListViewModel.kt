@@ -3,13 +3,18 @@ package com.logotet.bookapp.android.book.presentation.list
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
-import com.logotet.bookapp.android.core.domain.result.DataResult
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 class BookListViewModel(
     private val bookRepository: DefaultBookRepository
 ) : BaseViewModel<List<Book>>() {
@@ -31,18 +36,27 @@ class BookListViewModel(
     private var _tabState = MutableStateFlow(TabState.ALL_BOOKS)
     val tabState = _tabState.asStateFlow()
 
+    private val _queryState = MutableStateFlow(EMPTY_QUERY)
+    val queryState = _queryState.asStateFlow()
+
+    init {
+        observeQuery()
+    }
+
     fun onAction(action: BookListScreenAction) {
         when (action) {
             is BookListScreenAction.Search -> {
-                getBooksByQuery(action.query)
+                _queryState.value = action.query
             }
 
             is BookListScreenAction.DismissSearch -> {
+                _queryState.value = EMPTY_QUERY
                 _state.value = ScreenState.Idle
             }
 
             is BookListScreenAction.TabChange -> {
-                toggleTab()
+                onEvent(BookListScreenEvent.ClearQuery)
+                toggleTab ()
                 getBooks()
             }
         }
@@ -58,8 +72,22 @@ class BookListViewModel(
 
     private fun getBooks(query: String = EMPTY_QUERY) {
         when (_tabState.value) {
-            TabState.ALL_BOOKS -> getBooksByQuery("kotlin")
-            TabState.FAVORITE_BOOKS -> getBooksByQuery("Harry Potter")
+            TabState.ALL_BOOKS -> getBooksByQuery(query)
+            TabState.FAVORITE_BOOKS -> {
+
+            }
+        }
+    }
+
+    private fun observeQuery() {
+        viewModelScope.launch {
+            queryState
+                .debounce(DEBOUNCE_QUERY_TIME)
+                .distinctUntilChanged()
+                .onEach { query ->
+                    getBooks(query)
+                }
+                .stateIn(viewModelScope)
         }
     }
 
@@ -67,19 +95,7 @@ class BookListViewModel(
         viewModelScope.launch {
             bookRepository.getBooksList(query)
                 .collectLatest { result ->
-                    when (result) {
-                        is DataResult.Loading -> {
-                            _state.value = ScreenState.Loading
-                        }
-
-                        is DataResult.Success -> {
-                            _state.value = ScreenState.Success(result.data)
-                        }
-
-                        is DataResult.Error -> {
-                            _state.value = ScreenState.Error(result.error)
-                        }
-                    }
+                    result.handleResult()
                 }
         }
     }
@@ -89,6 +105,11 @@ class BookListViewModel(
             TabState.ALL_BOOKS -> _tabState.value = TabState.FAVORITE_BOOKS
             TabState.FAVORITE_BOOKS -> _tabState.value = TabState.ALL_BOOKS
         }
+    }
+
+    companion object {
+        private const val EMPTY_QUERY = ""
+        private const val DEBOUNCE_QUERY_TIME = 500L
     }
 }
 

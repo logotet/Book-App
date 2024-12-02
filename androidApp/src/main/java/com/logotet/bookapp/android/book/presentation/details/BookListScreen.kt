@@ -1,5 +1,6 @@
 package com.logotet.bookapp.android.book.presentation.details
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,6 +38,7 @@ fun BookListScreen(
 ) {
     val bookListState by viewModel.state.collectAsState()
     val tabState by viewModel.tabState.collectAsState()
+    val query by viewModel.queryState.collectAsState()
 
     ScreenScaffold(uiState = bookListState) { bookList ->
         val books = if (bookList == null || bookListState is BaseViewModel.ScreenState.Idle) {
@@ -46,6 +49,7 @@ fun BookListScreen(
 
         BookListContent(
             books = books,
+            initialQuery = query,
             selectedTabIndex = tabState.ordinal,
             onSearch = { query ->
                 viewModel.onAction(BookListViewModel.BookListScreenAction.Search(query))
@@ -67,6 +71,7 @@ fun BookListScreen(
 fun BookListContent(
     books: List<Book> = emptyList(),
     selectedTabIndex: Int,
+    initialQuery: String,
     onSearch: (String) -> Unit,
     dismissSearch: () -> Unit,
     onTabChange: () -> Unit,
@@ -83,6 +88,7 @@ fun BookListContent(
             .background(MaterialTheme.colorScheme.primary),
     ) {
         SearchBar(
+            initialQuery = initialQuery,
             search = { query ->
                 onSearch(query)
             },
