@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.logotet.bookapp.android.book.presentation.details.BookListScreen
+import com.logotet.bookapp.android.book.presentation.list.BookListScreen
 import com.logotet.bookapp.android.book.presentation.list.BookListViewModel
 import com.logotet.bookapp.android.core.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
