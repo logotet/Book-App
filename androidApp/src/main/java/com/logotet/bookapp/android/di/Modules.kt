@@ -5,6 +5,8 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.data.local.BookDatabase
 import com.logotet.bookapp.android.book.data.local.BookDatabaseFactory
+import com.logotet.bookapp.android.book.data.local.LocalDataSource
+import com.logotet.bookapp.android.book.data.local.RoomLocalBookDataSource
 import com.logotet.bookapp.android.book.data.network.KtorRemoteBookDataSource
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.android.book.domain.BookRepository
@@ -80,4 +82,8 @@ val databaseModule = module {
             .setDriver(BundledSQLiteDriver())
             .build()
     }
+
+    single {
+        RoomLocalBookDataSource(get())
+    }.bind<LocalDataSource>()
 }
