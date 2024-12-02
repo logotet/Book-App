@@ -18,6 +18,7 @@
     <string name="local_error_insert">Couldn\'t insert data.</string>
     <string name="local_error_update">Couldn\'t update data.</string>
     <string name="local_error_retrieve">Couldn\'t retrieve data.</string>
+    <string name="local_error_delete">Couldn\'t delete data.</string>
     <string name="local_unknown">Oops, something went wrong.</string>
 
     <string name="action_cancel">Cancel</string>

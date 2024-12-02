@@ -25,6 +25,7 @@ sealed class DataError(val throwable: Throwable?) : AppError {
         class Insert(throwable: Throwable?) : Local(throwable)
         class Update(throwable: Throwable?) : Local(throwable)
         class GetData(throwable: Throwable?) : Local(throwable)
+        class Delete(throwable: Throwable?) : Local(throwable)
         class Unknown(throwable: Throwable? = null) : Local(throwable)
     }
 }

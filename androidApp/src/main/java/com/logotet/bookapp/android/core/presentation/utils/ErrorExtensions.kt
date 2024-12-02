@@ -33,6 +33,7 @@ fun AppError.asString(): String =
                     is DataError.Local.Insert -> R.string.local_error_insert
                     is DataError.Local.Update -> R.string.local_error_update
                     is DataError.Local.GetData -> R.string.local_error_retrieve
+                    is DataError.Local.Delete -> R.string.local_error_delete
                     is DataError.Local.Unknown -> R.string.local_unknown
                 }
             )
