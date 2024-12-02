@@ -1,14 +1,17 @@
 package com.logotet.bookapp.android.core.presentation.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.logotet.bookapp.android.book.presentation.details.BookDetailsScreen
+import com.logotet.bookapp.android.book.presentation.details.BookDetailsViewModel
 import com.logotet.bookapp.android.book.presentation.list.BookListScreen
 import com.logotet.bookapp.android.book.presentation.list.BookListViewModel
 import com.logotet.bookapp.android.core.presentation.theme.AppTheme
@@ -41,7 +44,13 @@ fun App() {
                 }
 
                 composable<Route.BookDetails> { backStackEntry ->
-                    Text(backStackEntry.id)
+                    val arguments = backStackEntry.toRoute<Route.BookDetails>()
+
+                    BookDetailsScreen(
+                        viewModel = koinViewModel<BookDetailsViewModel>(),
+                        bookId = arguments.bookId,
+                        navigateBack = { navController.navigateUp() }
+                    )
                 }
             }
         }
