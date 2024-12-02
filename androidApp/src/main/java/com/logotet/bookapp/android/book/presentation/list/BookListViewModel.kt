@@ -73,9 +73,7 @@ class BookListViewModel(
     private fun getBooks(query: String = EMPTY_QUERY) {
         when (_tabState.value) {
             TabState.ALL_BOOKS -> getBooksByQuery(query)
-            TabState.FAVORITE_BOOKS -> {
-
-            }
+            TabState.FAVORITE_BOOKS -> getFavoriteBooks(query)
         }
     }
 
@@ -94,6 +92,15 @@ class BookListViewModel(
     private fun getBooksByQuery(query: String) {
         viewModelScope.launch {
             bookRepository.getBooksList(query)
+                .collectLatest { result ->
+                    result.handleResult()
+                }
+        }
+    }
+
+    private fun getFavoriteBooks(query: String) {
+        viewModelScope.launch {
+            bookRepository.getFavoriteBooksByTitle(query)
                 .collectLatest { result ->
                     result.handleResult()
                 }
