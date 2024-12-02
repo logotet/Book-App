@@ -19,6 +19,10 @@ class BookListViewModel(
         data object TabChange : BookListScreenAction
     }
 
+    sealed interface BookListScreenEvent {
+        data object ClearQuery : BookListScreenEvent
+    }
+
     enum class TabState {
         ALL_BOOKS,
         FAVORITE_BOOKS
@@ -44,7 +48,15 @@ class BookListViewModel(
         }
     }
 
-    private fun getBooks() {
+    private fun onEvent(event: BookListScreenEvent) {
+        when (event) {
+            is BookListScreenEvent.ClearQuery -> {
+                _queryState.value = EMPTY_QUERY
+            }
+        }
+    }
+
+    private fun getBooks(query: String = EMPTY_QUERY) {
         when (_tabState.value) {
             TabState.ALL_BOOKS -> getBooksByQuery("kotlin")
             TabState.FAVORITE_BOOKS -> getBooksByQuery("Harry Potter")
