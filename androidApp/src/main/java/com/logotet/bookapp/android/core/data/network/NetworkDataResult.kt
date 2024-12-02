@@ -1,4 +1,4 @@
-package com.logotet.bookapp.android.book.data.network
+package com.logotet.bookapp.android.core.data.network
 
 import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
