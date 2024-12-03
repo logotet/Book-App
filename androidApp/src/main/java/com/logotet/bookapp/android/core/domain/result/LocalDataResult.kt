@@ -11,10 +11,10 @@ suspend inline fun <reified Data, Action : DatabaseAction> makeLocalRequest(
         emit(DataResult.Loading)
 
         try {
-            execute()
+            emit(execute())
         } catch (e: Exception) {
-            parseLocalError(databaseAction = databaseAction, throwable = e)
-            emit(DataResult.Error(DataError.Local.Insert(e)))
+            val error = parseLocalError(databaseAction = databaseAction, throwable = e)
+            emit(error)
         }
     }
 
