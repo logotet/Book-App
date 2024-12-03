@@ -14,6 +14,8 @@ data class BookDetailsDto(
     val created: Created,
     @SerialName("key")
     val key: String,
+    @SerialName("description")
+    val description: String? = null,
     @SerialName("last_modified")
     val lastModified: LastModified,
     @SerialName("latest_revision")

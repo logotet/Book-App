@@ -1,27 +1,12 @@
 package com.logotet.bookapp.android.book.domain.model
 
-import java.time.LocalDateTime
-
-data class BookDetails (
+data class BookDetails(
+    val id: String,
     val title: String,
-    val authors: List<AuthorDetails>,
+    val description: String?,
     val covers: List<Int>,
-    val created: LocalDateTime,
-    val key: String,
     val revision: Int,
-    val subjects: List<String>,
-    val type: Type
+    val subjects: List<String>
 )
 
-data class AuthorDetails(
-    val author: Author,
-    val type: Type
-)
-
-data class Type(
-    val key: String
-)
-
-data class Author(
-    val key: String
-)
+typealias BookWithDetails = Pair<Book, BookDetails>
