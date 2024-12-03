@@ -20,7 +20,7 @@ fun Book.toBookEntity(): BookEntity =
 fun BookEntity.toBook(): Book =
     Book(
         id = id,
-        title = "Local $title",
+        title = title,
         imageUrl = imageUrl,
         authors = authors,
         languages = languages,

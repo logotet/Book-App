@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.logotet.bookapp.android.R
+import com.logotet.bookapp.android.book.presentation.common.RatingText
 import com.logotet.bookapp.android.core.presentation.theme.AppTheme
 import com.logotet.bookapp.android.core.presentation.theme.Dimensions
 
@@ -43,7 +43,7 @@ fun BookListItemCard(
     modifier: Modifier = Modifier,
     bookTitle: String,
     authorName: String,
-    bookRating: Double?,
+    bookRating: String,
     bookCoverPainter: Painter,
     navigate: () -> Unit
 ) {
@@ -84,18 +84,8 @@ fun BookListItemCard(
                 overflow = TextOverflow.Ellipsis
             )
 
-            bookRating?.let { rating ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = rating.toString())
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        tint = MaterialTheme.colorScheme.tertiary,
-                        contentDescription = null
-                    )
-                }
-            }
+
+            RatingText(bookRating)
         }
 
         Icon(
@@ -116,7 +106,7 @@ fun BookListItemPreview() {
         BookListItemCard(
             bookTitle = "Harry Potter",
             authorName = "J.K. Rowling",
-            bookRating = 4.3,
+            bookRating = "4.3",
             bookCoverPainter = painterResource(R.drawable.image_book_cover_placeholder),
             navigate = {}
         )
