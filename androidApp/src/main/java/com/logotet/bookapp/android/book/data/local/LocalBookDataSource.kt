@@ -5,7 +5,7 @@ import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import kotlinx.coroutines.flow.Flow
 
-interface LocalDataSource {
+interface LocalBookDataSource {
     suspend fun insertBook(book: BookEntity): Flow<DataResult<Unit, DataError.Local>>
 
     suspend fun deleteBook(book: BookEntity): Flow<DataResult<Unit, DataError.Local>>

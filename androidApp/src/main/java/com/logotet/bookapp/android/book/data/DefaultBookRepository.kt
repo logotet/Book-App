@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class DefaultBookRepository(
     private val remoteBookDataSource: RemoteBookDataSource,
-    private val localBookDataSource: RoomLocalBookDataSource,
+    private val localBookDataSource: LocalBookDataSource,
 ) : BookRepository {
     private val bookListCache = mutableListOf<Book>()
 
