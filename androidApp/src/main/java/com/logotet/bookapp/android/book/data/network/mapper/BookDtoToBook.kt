@@ -37,9 +37,5 @@ fun BookDto.toBook(): Book =
 fun BookDetailsDto.toBookDetails(): BookDetails =
     BookDetails(
         id = key,
-        title = title,
-        description = description,
-        covers = covers,
-        revision = revision,
-        subjects = subjects
+        description = description?.value,
     )
