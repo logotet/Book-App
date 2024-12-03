@@ -38,11 +38,12 @@ fun BookListScreen(
     val query by viewModel.queryState.collectAsState()
 
     ScreenScaffold(uiState = bookListState) { bookList ->
-        val books = if (bookList == null || bookListState is BaseViewModel.ScreenState.Idle) {
-            emptyList()
-        } else {
-            bookList
-        }
+        val books =
+            if (bookListState is BaseViewModel.ScreenState.Idle) {
+                emptyList()
+            } else {
+                bookList
+            }
 
         BookListContent(
             books = books,

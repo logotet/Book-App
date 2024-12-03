@@ -17,10 +17,10 @@ import com.logotet.bookapp.android.core.presentation.BaseViewModel
 import com.logotet.bookapp.android.core.presentation.utils.asString
 
 @Composable
-fun <T : Any?> ScreenScaffold(
+fun <T : Any> ScreenScaffold(
     modifier: Modifier = Modifier,
     uiState: BaseViewModel.ScreenState<T>,
-    content: @Composable BoxScope.(T?) -> Unit,
+    content: @Composable BoxScope.(T) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -68,7 +68,7 @@ fun <T : Any?> ScreenScaffold(
                 }
             }
 
-            content(data)
+            data?.let { content(it) }
         }
     }
 }
