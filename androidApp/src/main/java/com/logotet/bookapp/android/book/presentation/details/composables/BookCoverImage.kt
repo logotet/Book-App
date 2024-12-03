@@ -48,7 +48,7 @@ fun BookCoverImage(
             modifier = Modifier
                 .padding(Dimensions.Spacing.small)
                 .align(Alignment.TopEnd),
-            onClick = { onHeartClick(!isSaved) },
+            onClick = { onHeartClick(isSaved) },
         ) {
             Icon(
                 modifier = Modifier.size(heartSize),
