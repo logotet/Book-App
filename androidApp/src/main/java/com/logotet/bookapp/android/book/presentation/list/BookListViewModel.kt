@@ -2,6 +2,7 @@ package com.logotet.bookapp.android.book.presentation.list
 
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.book.data.DefaultBookRepository
+import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
 import kotlinx.coroutines.FlowPreview
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class BookListViewModel(
-    private val bookRepository: DefaultBookRepository
+    private val bookRepository: BookRepository
 ) : BaseViewModel<List<Book>>() {
     sealed interface BookListScreenAction {
         data class Search(val query: String) : BookListScreenAction
