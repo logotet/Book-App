@@ -1,6 +1,7 @@
 package com.logotet.bookapp.android.core.domain.result
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
 fun <Fetched, Local> Flow<DataResult<Fetched, DataError>>.mapSuccess(
@@ -17,3 +18,13 @@ fun <Fetched, Local> Flow<DataResult<Fetched, DataError>>.mapSuccess(
             }
         }
     }
+
+suspend fun <Data> Flow<DataResult<Data, DataError>>.onSuccess(
+    action: (Data) -> Unit
+) {
+    collectLatest { result ->
+        if(result is DataResult.Success<Data>) {
+            action(result.data)
+        }
+    }
+}
