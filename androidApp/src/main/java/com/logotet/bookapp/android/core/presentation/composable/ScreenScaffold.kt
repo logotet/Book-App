@@ -20,13 +20,15 @@ import com.logotet.bookapp.android.core.presentation.utils.asString
 fun <T : Any> ScreenScaffold(
     modifier: Modifier = Modifier,
     uiState: BaseViewModel.ScreenState<T>,
+    topBar: @Composable () -> Unit = {},
     content: @Composable BoxScope.(T) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        snackbarHost = { AppSnackbar(snackbarHostState) }
+        snackbarHost = { AppSnackbar(snackbarHostState) },
+        topBar = topBar
     ) { padding ->
         var data: T? by remember { mutableStateOf(null) }
         var isLoading by remember { mutableStateOf(false) }
