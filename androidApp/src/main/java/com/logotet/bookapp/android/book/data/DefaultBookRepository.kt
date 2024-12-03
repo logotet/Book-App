@@ -8,7 +8,7 @@ import com.logotet.bookapp.android.book.data.network.mapper.toBookDetails
 import com.logotet.bookapp.android.book.data.network.mapper.toBookList
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
-import com.logotet.bookapp.android.book.domain.model.BookDetails
+import com.logotet.bookapp.android.book.domain.model.BookWithDetails
 import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import com.logotet.bookapp.android.core.domain.result.mapSuccess
@@ -20,25 +20,33 @@ class DefaultBookRepository(
     private val remoteBookDataSource: RemoteBookDataSource,
     private val localBookDataSource: RoomLocalBookDataSource,
 ) : BookRepository {
+    private val bookListCache = mutableListOf<Book>()
+
     override suspend fun getBooksList(
         query: String
     ): Flow<DataResult<List<Book>, DataError>> =
         remoteBookDataSource.searchBooks(query)
             .mapSuccess { bookItemsDto ->
-                bookItemsDto.toBookList().also {
-                    it.forEach { b ->
-                        insertFavoriteBook(b)
-                    }
-                }
+                val bookList = bookItemsDto.toBookList()
+
+                bookListCache.clear()
+                bookListCache.addAll(bookList)
+
+                bookList
             }
             .flowOn(Dispatchers.IO)
 
     override suspend fun getBookDetails(
         bookId: String
-    ): Flow<DataResult<BookDetails, DataError>> =
+    ): Flow<DataResult<BookWithDetails, DataError>> =
         remoteBookDataSource.getBookDetails(bookId)
             .mapSuccess { bookDetailsDto ->
-                bookDetailsDto.toBookDetails()
+                val bookDetails = bookDetailsDto.toBookDetails()
+                val book = bookListCache.first { book ->
+                    book.id == bookId
+                }
+
+                BookWithDetails(book, bookDetails)
             }
             .flowOn(Dispatchers.IO)
 
