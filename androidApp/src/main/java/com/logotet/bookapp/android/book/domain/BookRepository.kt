@@ -13,9 +13,9 @@ interface BookRepository {
 
     suspend fun insertFavoriteBook(book: Book): Flow<DataResult<Unit, DataError>>
 
-    suspend fun removeBookFromFavorites(book: Book): Flow<DataResult<Unit, DataError>>
+    suspend fun removeBookFromFavorites(bookId: String): Flow<DataResult<Unit, DataError>>
 
-    suspend fun getFavoriteBookById(bookId: String): Flow<DataResult<Book?, DataError>>
+    suspend fun isFavoriteBook(bookId: String): Flow<DataResult<Boolean, DataError>>
 
     suspend fun getFavoriteBooksByTitle(title: String): Flow<DataResult<List<Book>, DataError>>
 

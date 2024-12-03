@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalBookDataSource {
     suspend fun insertBook(book: BookEntity): Flow<DataResult<Unit, DataError.Local>>
 
-    suspend fun deleteBook(book: BookEntity): Flow<DataResult<Unit, DataError.Local>>
+    suspend fun deleteBook(bookId: String): Flow<DataResult<Unit, DataError.Local>>
 
     suspend fun getBookById(bookId: String): Flow<DataResult<BookEntity?, DataError.Local>>
 

@@ -9,21 +9,27 @@ import kotlinx.coroutines.flow.Flow
 
 class RoomLocalBookDataSource(
     private val bookDao: BookDao
-): LocalDataSource {
+): LocalBookDataSource {
+    companion object {
+        private const val SUCCESSFUL_THRESHOLD = 0
+    }
+
     override suspend fun insertBook(book: BookEntity): Flow<DataResult<Unit, DataError.Local>> =
         makeLocalRequest(databaseAction = DatabaseAction.INSERT) {
             val insertBookResult = bookDao.insertBook(book)
 
-            if (insertBookResult > 0) {
+            val result = if (insertBookResult > SUCCESSFUL_THRESHOLD) {
                 DataResult.Success(Unit)
             } else {
                 DataResult.Error(DataError.Local.Insert(null))
             }
+
+            result
         }
 
-    override suspend fun deleteBook(book: BookEntity): Flow<DataResult<Unit, DataError.Local>> =
+    override suspend fun deleteBook(bookId: String): Flow<DataResult<Unit, DataError.Local>> =
         makeLocalRequest(databaseAction = DatabaseAction.DELETE) {
-            bookDao.deleteBookById(book.id)
+            bookDao.deleteBookById(bookId)
             DataResult.Success(Unit)
         }
 

@@ -1,6 +1,6 @@
 package com.logotet.bookapp.android.book.data
 
-import com.logotet.bookapp.android.book.data.local.RoomLocalBookDataSource
+import com.logotet.bookapp.android.book.data.local.LocalBookDataSource
 import com.logotet.bookapp.android.book.data.local.mapper.toBook
 import com.logotet.bookapp.android.book.data.local.mapper.toBookEntity
 import com.logotet.bookapp.android.book.data.network.RemoteBookDataSource
@@ -54,32 +54,32 @@ class DefaultBookRepository(
         book: Book
     ): Flow<DataResult<Unit, DataError>> =
         localBookDataSource.insertBook(book.toBookEntity())
-
+            .flowOn(Dispatchers.IO)
 
     override suspend fun removeBookFromFavorites(
-        book: Book
-    ): Flow<DataResult<Unit, DataError>> =
-        localBookDataSource.deleteBook(book.toBookEntity())
-
-
-    override suspend fun getFavoriteBookById(
         bookId: String
-    ): Flow<DataResult<Book?, DataError>> =
+    ): Flow<DataResult<Unit, DataError>> =
+        localBookDataSource.deleteBook(bookId)
+            .flowOn(Dispatchers.IO)
+
+    override suspend fun isFavoriteBook(
+        bookId: String
+    ): Flow<DataResult<Boolean, DataError>> =
         localBookDataSource.getBookById(bookId).mapSuccess { bookEntity ->
-            bookEntity?.toBook()
-        }
+            bookEntity?.let { true } ?: false
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun getFavoriteBooksByTitle(title: String): Flow<DataResult<List<Book>, DataError>> =
         localBookDataSource.getBooksByQuery(query = title).mapSuccess { bookEntityList ->
             bookEntityList.map { bookEntity ->
                 bookEntity.toBook()
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun getAllFavoriteBooks(): Flow<DataResult<List<Book>, DataError>> =
         localBookDataSource.getAllBooks().mapSuccess { bookEntityList ->
             bookEntityList.map { bookEntity ->
                 bookEntity.toBook()
             }
-        }
+        }.flowOn(Dispatchers.IO)
 }
