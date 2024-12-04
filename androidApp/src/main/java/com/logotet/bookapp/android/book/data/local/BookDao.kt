@@ -17,7 +17,7 @@ interface BookDao {
     @Query("SELECT * FROM books WHERE id = :id")
     fun getBookById(id: String): BookEntity?
 
-    @Query("SELECT * FROM books WHERE title LIKE :title || '%'")
+    @Query("SELECT * FROM books WHERE title LIKE '%' || :title || '%'")
     fun getBooksByTittle(title: String):List<BookEntity>
 
     @Query("DELETE FROM books WHERE id = :id")

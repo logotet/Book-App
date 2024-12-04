@@ -82,7 +82,7 @@ class DefaultBookRepository(
 
     override suspend fun getAllFavoriteBooks(): Flow<DataResult<List<Book>, DataError>> =
         localBookDataSource.getAllBooks().mapSuccess { bookEntityList ->
-           val favoriteBooks = bookEntityList.map { bookEntity ->
+            val favoriteBooks = bookEntityList.map { bookEntity ->
                 bookEntity.toBook()
             }
 
@@ -90,5 +90,12 @@ class DefaultBookRepository(
             bookListLocalCache.addAll(favoriteBooks)
 
             favoriteBooks
+        }.flowOn(Dispatchers.IO)
+
+    suspend fun queryFavoriteBooks(title: String): Flow<DataResult<List<Book>, DataError>> =
+        localBookDataSource.getBooksByQuery(query = title).mapSuccess { bookEntityList ->
+            bookEntityList.map { bookEntity ->
+                bookEntity.toBook()
+            }
         }.flowOn(Dispatchers.IO)
 }

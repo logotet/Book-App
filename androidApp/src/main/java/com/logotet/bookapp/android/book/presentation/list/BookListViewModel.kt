@@ -1,7 +1,6 @@
 package com.logotet.bookapp.android.book.presentation.list
 
 import androidx.lifecycle.viewModelScope
-import com.logotet.bookapp.android.book.data.DefaultBookRepository
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
@@ -57,7 +56,7 @@ class BookListViewModel(
 
             is BookListScreenAction.TabChange -> {
                 onEvent(BookListScreenEvent.ClearQuery)
-                toggleTab ()
+                toggleTab()
                 getBooks()
             }
         }
@@ -74,7 +73,20 @@ class BookListViewModel(
     private fun getBooks(query: String = EMPTY_QUERY) {
         when (_tabState.value) {
             TabState.ALL_BOOKS -> getBooksByQuery(query)
-            TabState.FAVORITE_BOOKS -> getFavoriteBooks(query)
+            TabState.FAVORITE_BOOKS ->
+                if (query.isBlank())
+                    getFavoriteBooks()
+                else
+                    getFavoriteBooksByQuery(query)
+        }
+    }
+
+    private fun getFavoriteBooksByQuery(query: String) {
+        viewModelScope.launch {
+            bookRepository.getFavoriteBooksByTitle(query)
+                .collectLatest { result ->
+                    result.handleResult()
+                }
         }
     }
 
@@ -99,7 +111,7 @@ class BookListViewModel(
         }
     }
 
-    private fun getFavoriteBooks(query: String) {
+    private fun getFavoriteBooks() {
         viewModelScope.launch {
             bookRepository.getAllFavoriteBooks()
                 .collectLatest { result ->
@@ -109,6 +121,7 @@ class BookListViewModel(
     }
 
     private fun toggleTab() {
+        _state.value = ScreenState.Loading
         when (_tabState.value) {
             TabState.ALL_BOOKS -> _tabState.value = TabState.FAVORITE_BOOKS
             TabState.FAVORITE_BOOKS -> _tabState.value = TabState.ALL_BOOKS
