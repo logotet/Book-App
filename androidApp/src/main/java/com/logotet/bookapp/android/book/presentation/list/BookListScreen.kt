@@ -121,7 +121,11 @@ fun BookListContent(
                     Text(text = stringResource(R.string.no_books_message))
                 }
             } else {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                ) {
                     items(books) { book ->
                         val authorName = book.authors.firstOrNull() ?: EMPTY_STRING
                         val bookPainter = rememberCoilImagePainter(book.imageUrl)
