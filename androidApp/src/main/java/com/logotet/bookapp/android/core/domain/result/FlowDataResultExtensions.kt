@@ -11,8 +11,13 @@ fun <Fetched, Local> Flow<DataResult<Fetched, DataError>>.mapSuccess(
         when (result) {
             is DataResult.Loading -> result
             is DataResult.Success<Fetched> -> {
-                DataResult.Success(convert(result.data))
+                try {
+                    DataResult.Success(convert(result.data))
+                } catch (e: Exception) {
+                    DataResult.Error(DataError.Local.Unknown())
+                }
             }
+
             is DataResult.Error -> {
                 result
             }
@@ -23,7 +28,7 @@ suspend fun <Data> Flow<DataResult<Data, DataError>>.onSuccess(
     action: (Data) -> Unit
 ) {
     collectLatest { result ->
-        if(result is DataResult.Success<Data>) {
+        if (result is DataResult.Success<Data>) {
             action(result.data)
         }
     }
