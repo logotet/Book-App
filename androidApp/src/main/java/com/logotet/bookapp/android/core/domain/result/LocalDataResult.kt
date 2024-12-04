@@ -10,12 +10,16 @@ suspend inline fun <reified Data, Action : DatabaseAction> makeLocalRequest(
     flow {
         emit(DataResult.Loading)
 
-        try {
-            emit(execute())
-        } catch (e: Exception) {
-            val error = parseLocalError(databaseAction = databaseAction, throwable = e)
-            emit(error)
+        val result = try {
+            execute()
+        } catch (throwable: Throwable) {
+            parseLocalError(
+                databaseAction = databaseAction,
+                throwable = throwable
+            )
         }
+
+        emit(result)
     }
 
 fun parseLocalError(

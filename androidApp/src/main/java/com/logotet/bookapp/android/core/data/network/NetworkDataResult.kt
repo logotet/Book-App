@@ -20,12 +20,16 @@ suspend inline fun <reified Data> makeRequest(
     return flow {
         emit(DataResult.Loading)
 
-        try {
+        val result = try {
             val response = execute()
-            emit(DataResult.Success(response.body<Data>()))
-        } catch (e: Exception) {
-            emit(parseError(e))
+            val body = response.body<Data>()
+
+            DataResult.Success(body)
+        } catch (throwable: Throwable) {
+            parseError(throwable)
         }
+
+        emit(result)
     }
 }
 
@@ -47,7 +51,9 @@ fun parseError(throwable: Throwable?): DataResult<Nothing, DataError.Remote> =
             // for 5xx responses
             is ServerResponseException -> DataError.Remote.Server(throwable)
             // for deserialization errors
-            is JsonConvertException, is SerializationException -> DataError.Remote.Serialization(throwable)
+            is JsonConvertException, is SerializationException -> DataError.Remote.Serialization(
+                throwable
+            )
             // for timeout errors
             is HttpRequestTimeoutException -> DataError.Remote.Timeout(throwable)
             // for any other errors
