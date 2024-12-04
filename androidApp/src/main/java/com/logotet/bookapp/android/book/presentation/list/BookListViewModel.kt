@@ -101,7 +101,7 @@ class BookListViewModel(
 
     private fun getFavoriteBooks(query: String) {
         viewModelScope.launch {
-            bookRepository.getFavoriteBooksByTitle(query)
+            bookRepository.getAllFavoriteBooks()
                 .collectLatest { result ->
                     result.handleResult()
                 }

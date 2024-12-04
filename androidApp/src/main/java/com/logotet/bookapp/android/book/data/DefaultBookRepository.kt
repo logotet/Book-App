@@ -20,7 +20,8 @@ class DefaultBookRepository(
     private val remoteBookDataSource: RemoteBookDataSource,
     private val localBookDataSource: LocalBookDataSource,
 ) : BookRepository {
-    private val bookListCache = mutableListOf<Book>()
+    private val bookListRemoteCache = mutableListOf<Book>()
+    private val bookListLocalCache = mutableListOf<Book>()
 
     override suspend fun getBooksList(
         query: String
@@ -29,19 +30,22 @@ class DefaultBookRepository(
             .mapSuccess { bookItemsDto ->
                 val bookList = bookItemsDto.toBookList()
 
-                bookListCache.clear()
-                bookListCache.addAll(bookList)
+                bookListRemoteCache.clear()
+                bookListRemoteCache.addAll(bookList)
 
                 bookList
             }
             .flowOn(Dispatchers.IO)
 
     override suspend fun getBookDetails(
-        bookId: String
+        bookId: String,
+        isSaved: Boolean
     ): Flow<DataResult<BookWithDetails, DataError>> =
         remoteBookDataSource.getBookDetails(bookId)
             .mapSuccess { bookDetailsDto ->
                 val bookDetails = bookDetailsDto.toBookDetails()
+
+                val bookListCache = if (isSaved) bookListLocalCache else bookListRemoteCache
                 val book = bookListCache.first { book ->
                     book.id == bookId
                 }
@@ -78,8 +82,13 @@ class DefaultBookRepository(
 
     override suspend fun getAllFavoriteBooks(): Flow<DataResult<List<Book>, DataError>> =
         localBookDataSource.getAllBooks().mapSuccess { bookEntityList ->
-            bookEntityList.map { bookEntity ->
+           val favoriteBooks = bookEntityList.map { bookEntity ->
                 bookEntity.toBook()
             }
+
+            bookListLocalCache.clear()
+            bookListLocalCache.addAll(favoriteBooks)
+
+            favoriteBooks
         }.flowOn(Dispatchers.IO)
 }

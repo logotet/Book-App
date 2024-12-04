@@ -26,16 +26,18 @@ class BookDetailsViewModel(
 
     fun getBookDetails(bookId: String) {
         viewModelScope.launch {
-            bookRepository.getBookDetails(bookId)
-                .collectLatest { result ->
-                    result.handleResult()
-                }
-
             bookRepository.isFavoriteBook(bookId).collectLatest { isFavoriteResult ->
                 if (isFavoriteResult is DataResult.Success) {
                     _isSaved.value = isFavoriteResult.data
                 } else {
                     _isSaved.value = false
+                }
+
+                viewModelScope.launch {
+                    bookRepository.getBookDetails(bookId, _isSaved.value)
+                        .collectLatest { bookWithDetailsResult ->
+                            bookWithDetailsResult.handleResult()
+                        }
                 }
             }
         }

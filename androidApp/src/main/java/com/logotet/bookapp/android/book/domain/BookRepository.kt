@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface BookRepository {
     suspend fun getBooksList(query: String): Flow<DataResult<List<Book>, DataError>>
 
-    suspend fun getBookDetails(bookId: String): Flow<DataResult<BookWithDetails, DataError>>
+    suspend fun getBookDetails(bookId: String, isSaved: Boolean): Flow<DataResult<BookWithDetails, DataError>>
 
     suspend fun insertFavoriteBook(book: Book): Flow<DataResult<Unit, DataError>>
 
