@@ -91,11 +91,4 @@ class DefaultBookRepository(
 
             favoriteBooks
         }.flowOn(Dispatchers.IO)
-
-    suspend fun queryFavoriteBooks(title: String): Flow<DataResult<List<Book>, DataError>> =
-        localBookDataSource.getBooksByQuery(query = title).mapSuccess { bookEntityList ->
-            bookEntityList.map { bookEntity ->
-                bookEntity.toBook()
-            }
-        }.flowOn(Dispatchers.IO)
 }
