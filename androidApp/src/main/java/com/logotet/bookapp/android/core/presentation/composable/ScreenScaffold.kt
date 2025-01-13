@@ -14,7 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import com.logotet.bookapp.android.core.presentation.utils.asString
 
 @Composable
 fun <T : Any> ScreenScaffold(
@@ -23,8 +27,12 @@ fun <T : Any> ScreenScaffold(
     topBar: @Composable () -> Unit = {},
     content: @Composable BoxScope.(T?) -> Unit,
 ) {
+    val viewLifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
     val uiState by baseViewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val event by baseViewModel.event.collectAsState(initial = null)
 
     var data: T? by remember { mutableStateOf(null) }
 
@@ -33,6 +41,17 @@ fun <T : Any> ScreenScaffold(
         snackbarHost = { AppSnackbar(snackbarHostState) },
         topBar = topBar
     ) { padding ->
+
+        LaunchedEffect(viewLifecycleOwner.lifecycle) {
+            if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.STARTED)
+                baseViewModel.event.collect { event ->
+                    when (event) {
+                        is BaseViewModel.Event.ShowError -> {
+                            snackbarHostState.showSnackbar(event.error.asString(context))
+                        }
+                    }
+                }
+        }
 
         Box(
             modifier = Modifier
