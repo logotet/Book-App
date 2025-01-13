@@ -43,12 +43,9 @@ fun App() {
                     )
                 }
 
-                composable<Route.BookDetails> { backStackEntry ->
-                    val arguments = backStackEntry.toRoute<Route.BookDetails>()
-
+                composable<Route.BookDetails> {
                     BookDetailsScreen(
                         viewModel = koinViewModel<BookDetailsViewModel>(),
-                        bookId = arguments.bookId,
                         navigateBack = { navController.navigateUp() }
                     )
                 }

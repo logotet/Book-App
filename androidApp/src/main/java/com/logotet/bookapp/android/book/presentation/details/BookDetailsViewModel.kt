@@ -1,5 +1,6 @@
 package com.logotet.bookapp.android.book.presentation.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
@@ -7,12 +8,14 @@ import com.logotet.bookapp.android.book.domain.model.BookWithDetails
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import com.logotet.bookapp.android.core.domain.result.onSuccess
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import com.logotet.bookapp.android.core.presentation.navigation.Route
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class BookDetailsViewModel(
+    saveStateHandle: SavedStateHandle,
     private val bookRepository: BookRepository
 ) : BaseViewModel<BookWithDetails>() {
 
@@ -20,6 +23,8 @@ class BookDetailsViewModel(
         data class SaveBook(val book: Book) : BookDetailsAction
         data class DeleteBook(val book: Book) : BookDetailsAction
     }
+
+    private val bookId: String = checkNotNull(saveStateHandle[Route.BookDetails.BOOK_ID])
 
     private val _isSaved: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isSaved = _isSaved.asStateFlow()
