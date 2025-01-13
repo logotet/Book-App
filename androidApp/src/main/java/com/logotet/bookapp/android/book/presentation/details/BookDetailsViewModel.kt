@@ -81,4 +81,8 @@ class BookDetailsViewModel(
                 }
         }
     }
+
+    override fun getData() {
+        getBookDetails(bookId)
+    }
 }

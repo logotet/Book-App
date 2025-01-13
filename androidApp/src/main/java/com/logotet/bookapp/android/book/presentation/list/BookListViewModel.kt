@@ -33,15 +33,15 @@ class BookListViewModel(
         FAVORITE_BOOKS
     }
 
+    override fun getData() {
+        observeQuery()
+    }
+
     private var _tabState = MutableStateFlow(TabState.ALL_BOOKS)
     val tabState = _tabState.asStateFlow()
 
     private val _queryState = MutableStateFlow(EMPTY_QUERY)
     val queryState = _queryState.asStateFlow()
-
-    init {
-        observeQuery()
-    }
 
     fun onAction(action: BookListScreenAction) {
         when (action) {

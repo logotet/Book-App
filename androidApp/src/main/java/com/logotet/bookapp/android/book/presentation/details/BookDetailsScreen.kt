@@ -40,15 +40,10 @@ import com.logotet.bookapp.android.core.presentation.utils.asCommaSeparatedStrin
 @Composable
 fun BookDetailsScreen(
     viewModel: BookDetailsViewModel,
-    bookId: String,
     navigateBack: () -> Unit
 ) {
     val bookDetailsState by viewModel.state.collectAsState()
     val isSaved by viewModel.isSaved.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.getBookDetails(bookId)
-    }
 
     ScreenScaffold(uiState = bookDetailsState,
         topBar = {
