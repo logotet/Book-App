@@ -1,6 +1,5 @@
 package com.logotet.bookapp.android.book.presentation.details
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,29 +43,31 @@ fun BookDetailsScreen(
     val bookDetailsState by viewModel.state.collectAsState()
     val isSaved by viewModel.isSaved.collectAsState()
 
-    ScreenScaffold(uiState = bookDetailsState,
+    ScreenScaffold(baseViewModel = viewModel,
         topBar = {
             TopBar(
                 onNavigate = navigateBack
             )
         }
     ) { bookWithDetails ->
-        val book = bookWithDetails.first
+        bookWithDetails?.let { data ->
+            val book = data.first
 
-        BookDetailsContent(
-            bookWithDetails = bookWithDetails,
-            isSaved = isSaved,
-            setBookFavoriteStatus = { isSaved ->
-                if (isSaved)
-                    viewModel.onAction(
-                        BookDetailsViewModel.BookDetailsAction.DeleteBook(book)
-                    )
-                else
-                    viewModel.onAction(
-                        BookDetailsViewModel.BookDetailsAction.SaveBook(book)
-                    )
-            }
-        )
+            BookDetailsContent(
+                bookWithDetails = data,
+                isSaved = isSaved,
+                setBookFavoriteStatus = { isSaved ->
+                    if (isSaved)
+                        viewModel.onAction(
+                            BookDetailsViewModel.BookDetailsAction.DeleteBook(book)
+                        )
+                    else
+                        viewModel.onAction(
+                            BookDetailsViewModel.BookDetailsAction.SaveBook(book)
+                        )
+                }
+            )
+        }
     }
 }
 
