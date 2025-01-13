@@ -3,7 +3,7 @@
     // Book List Screen
     <string name="tab_book_list_all">All Books</string>
     <string name="tab_book_list_favorite">Favorite Books</string>
-    <string name="no_books_message">No Books Found</string>
+    <string name="no_books_message">Enter your book name to search the database</string>
 
     // Book Details Screen
     <string name="header_rating">Rating</string>
