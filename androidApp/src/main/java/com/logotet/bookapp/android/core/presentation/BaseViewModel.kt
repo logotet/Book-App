@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.core.domain.result.AppError
 import com.logotet.bookapp.android.core.domain.result.DataError
 import com.logotet.bookapp.android.core.domain.result.DataResult
+import com.logotet.bookapp.android.core.presentation.state.Event
+import com.logotet.bookapp.android.core.presentation.state.ScreenState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,16 +30,6 @@ abstract class BaseViewModel<T> : ViewModel() {
 
     protected val _event = Channel<Event>()
     val event = _event.receiveAsFlow()
-
-    sealed interface ScreenState<out T> {
-        data object Idle : ScreenState<Nothing>
-        data object Loading : ScreenState<Nothing>
-        data class Success<T>(val data: T) : ScreenState<T>
-    }
-
-    sealed interface Event {
-        data class ShowError(val error: AppError) : Event
-    }
 
     abstract fun getData()
 

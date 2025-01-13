@@ -24,6 +24,7 @@ import com.logotet.bookapp.android.book.presentation.list.composables.TabRow
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
 import com.logotet.bookapp.android.core.presentation.composable.ScreenScaffold
 import com.logotet.bookapp.android.core.presentation.composable.rememberCoilImagePainter
+import com.logotet.bookapp.android.core.presentation.state.ScreenState
 import com.logotet.bookapp.android.core.presentation.theme.Dimensions
 
 private const val EMPTY_STRING = ""
@@ -39,7 +40,7 @@ fun BookListScreen(
 
     ScreenScaffold(baseViewModel = viewModel) { bookList ->
         val books =
-            if (bookListState is BaseViewModel.ScreenState.Idle) {
+            if (bookListState is ScreenState.Idle) {
                 emptyList()
             } else {
                 bookList
@@ -50,13 +51,13 @@ fun BookListScreen(
             initialQuery = query,
             selectedTabIndex = tabState.ordinal,
             onSearch = { query ->
-                viewModel.onAction(BookListViewModel.BookListScreenAction.Search(query))
+                viewModel.onAction(BookListScreenAction.Search(query))
             },
             dismissSearch = {
-                viewModel.onAction(BookListViewModel.BookListScreenAction.Search(EMPTY_STRING))
+                viewModel.onAction(BookListScreenAction.Search(EMPTY_STRING))
             },
             onTabChange = {
-                viewModel.onAction(BookListViewModel.BookListScreenAction.TabChange)
+                viewModel.onAction(BookListScreenAction.TabChange)
             },
             navigateToBookDetails = { bookId ->
                 navigateToBookDetails(bookId)

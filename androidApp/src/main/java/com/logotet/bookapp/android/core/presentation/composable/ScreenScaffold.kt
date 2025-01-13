@@ -18,6 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import com.logotet.bookapp.android.core.presentation.state.Event
+import com.logotet.bookapp.android.core.presentation.state.ScreenState
 import com.logotet.bookapp.android.core.presentation.utils.asString
 
 @Composable
@@ -32,7 +34,6 @@ fun <T : Any> ScreenScaffold(
 
     val uiState by baseViewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val event by baseViewModel.event.collectAsState(initial = null)
 
     var data: T? by remember { mutableStateOf(null) }
 
@@ -46,7 +47,7 @@ fun <T : Any> ScreenScaffold(
             if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.STARTED)
                 baseViewModel.event.collect { event ->
                     when (event) {
-                        is BaseViewModel.Event.ShowError -> {
+                        is Event.ShowError -> {
                             snackbarHostState.showSnackbar(event.error.asString(context))
                         }
                     }
@@ -61,14 +62,14 @@ fun <T : Any> ScreenScaffold(
             content(data)
 
             when (uiState) {
-                is BaseViewModel.ScreenState.Idle -> {}
+                is ScreenState.Idle -> {}
 
-                is BaseViewModel.ScreenState.Loading -> {
+                is ScreenState.Loading -> {
                     ProgressIndicator()
                 }
 
-                is BaseViewModel.ScreenState.Success -> {
-                    data = (uiState as? BaseViewModel.ScreenState.Success<T>)?.data
+                is ScreenState.Success -> {
+                    data = (uiState as? ScreenState.Success<T>)?.data
                 }
             }
         }

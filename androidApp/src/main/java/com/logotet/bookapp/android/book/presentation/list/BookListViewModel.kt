@@ -3,7 +3,11 @@ package com.logotet.bookapp.android.book.presentation.list
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
+import com.logotet.bookapp.android.book.presentation.list.BookListScreenAction.*
+import com.logotet.bookapp.android.book.presentation.list.BookListScreenEvent.*
+import com.logotet.bookapp.android.book.presentation.list.TabState.*
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
+import com.logotet.bookapp.android.core.presentation.state.ScreenState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,44 +22,29 @@ import kotlinx.coroutines.launch
 class BookListViewModel(
     private val bookRepository: BookRepository
 ) : BaseViewModel<List<Book>>() {
-    sealed interface BookListScreenAction {
-        data class Search(val query: String) : BookListScreenAction
-        data object DismissSearch : BookListScreenAction
-        data object TabChange : BookListScreenAction
-    }
-
-    sealed interface BookListScreenEvent {
-        data object ClearQuery : BookListScreenEvent
-    }
-
-    enum class TabState {
-        ALL_BOOKS,
-        FAVORITE_BOOKS
-    }
-
-    override fun getData() {
-        observeQuery()
-    }
-
-    private var _tabState = MutableStateFlow(TabState.ALL_BOOKS)
+    private var _tabState = MutableStateFlow(ALL_BOOKS)
     val tabState = _tabState.asStateFlow()
 
     private val _queryState = MutableStateFlow(EMPTY_QUERY)
     val queryState = _queryState.asStateFlow()
 
+    override fun getData() {
+        observeQuery()
+    }
+
     fun onAction(action: BookListScreenAction) {
         when (action) {
-            is BookListScreenAction.Search -> {
+            is Search -> {
                 _queryState.value = action.query
             }
 
-            is BookListScreenAction.DismissSearch -> {
+            is DismissSearch -> {
                 _queryState.value = EMPTY_QUERY
                 _state.value = ScreenState.Idle
             }
 
-            is BookListScreenAction.TabChange -> {
-                onEvent(BookListScreenEvent.ClearQuery)
+            is TabChange -> {
+                onEvent(ClearQuery)
                 toggleTab()
                 getBooks()
             }
@@ -64,7 +53,7 @@ class BookListViewModel(
 
     private fun onEvent(event: BookListScreenEvent) {
         when (event) {
-            is BookListScreenEvent.ClearQuery -> {
+            is ClearQuery -> {
                 _queryState.value = EMPTY_QUERY
             }
         }
@@ -72,8 +61,8 @@ class BookListViewModel(
 
     private fun getBooks(query: String = EMPTY_QUERY) {
         when (_tabState.value) {
-            TabState.ALL_BOOKS -> getBooksByQuery(query)
-            TabState.FAVORITE_BOOKS ->
+            ALL_BOOKS -> getBooksByQuery(query)
+            FAVORITE_BOOKS ->
                 if (query.isBlank())
                     getFavoriteBooks()
                 else
@@ -123,8 +112,8 @@ class BookListViewModel(
 
     private fun toggleTab() {
         when (_tabState.value) {
-            TabState.ALL_BOOKS -> _tabState.value = TabState.FAVORITE_BOOKS
-            TabState.FAVORITE_BOOKS -> _tabState.value = TabState.ALL_BOOKS
+            ALL_BOOKS -> _tabState.value = FAVORITE_BOOKS
+            FAVORITE_BOOKS -> _tabState.value = ALL_BOOKS
         }
     }
 
@@ -132,5 +121,20 @@ class BookListViewModel(
         private const val EMPTY_QUERY = ""
         private const val DEBOUNCE_QUERY_TIME = 500L
     }
+}
+
+sealed interface BookListScreenAction {
+    data class Search(val query: String) : BookListScreenAction
+    data object DismissSearch : BookListScreenAction
+    data object TabChange : BookListScreenAction
+}
+
+sealed interface BookListScreenEvent {
+    data object ClearQuery : BookListScreenEvent
+}
+
+enum class TabState {
+    ALL_BOOKS,
+    FAVORITE_BOOKS
 }
 

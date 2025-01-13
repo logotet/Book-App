@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.android.book.domain.BookRepository
 import com.logotet.bookapp.android.book.domain.model.Book
 import com.logotet.bookapp.android.book.domain.model.BookWithDetails
+import com.logotet.bookapp.android.book.presentation.details.BookDetailsAction.*
 import com.logotet.bookapp.android.core.domain.result.DataResult
 import com.logotet.bookapp.android.core.domain.result.onSuccess
 import com.logotet.bookapp.android.core.presentation.BaseViewModel
@@ -18,12 +19,6 @@ class BookDetailsViewModel(
     saveStateHandle: SavedStateHandle,
     private val bookRepository: BookRepository
 ) : BaseViewModel<BookWithDetails>() {
-
-    sealed interface BookDetailsAction {
-        data class SaveBook(val book: Book) : BookDetailsAction
-        data class DeleteBook(val book: Book) : BookDetailsAction
-    }
-
     private val bookId: String = checkNotNull(saveStateHandle[Route.BookDetails.BOOK_ID])
 
     private val _isSaved: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -50,17 +45,17 @@ class BookDetailsViewModel(
 
     fun onAction(action: BookDetailsAction) {
         when (action) {
-            is BookDetailsAction.SaveBook -> {
+            is SaveBook -> {
                 onSaveBookAction(action)
             }
 
-            is BookDetailsAction.DeleteBook -> {
+            is DeleteBook -> {
                 onDeleteBookAction(action)
             }
         }
     }
 
-    private fun onDeleteBookAction(action: BookDetailsAction.DeleteBook) {
+    private fun onDeleteBookAction(action: DeleteBook) {
         val book = action.book
 
         viewModelScope.launch {
@@ -71,7 +66,7 @@ class BookDetailsViewModel(
         }
     }
 
-    private fun onSaveBookAction(action: BookDetailsAction.SaveBook) {
+    private fun onSaveBookAction(action: SaveBook) {
         viewModelScope.launch {
             val book = action.book
 
@@ -85,4 +80,9 @@ class BookDetailsViewModel(
     override fun getData() {
         getBookDetails(bookId)
     }
+}
+
+sealed interface BookDetailsAction {
+    data class SaveBook(val book: Book) : BookDetailsAction
+    data class DeleteBook(val book: Book) : BookDetailsAction
 }

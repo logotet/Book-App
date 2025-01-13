@@ -59,11 +59,11 @@ fun BookDetailsScreen(
                 setBookFavoriteStatus = { isSaved ->
                     if (isSaved)
                         viewModel.onAction(
-                            BookDetailsViewModel.BookDetailsAction.DeleteBook(book)
+                            BookDetailsAction.DeleteBook(book)
                         )
                     else
                         viewModel.onAction(
-                            BookDetailsViewModel.BookDetailsAction.SaveBook(book)
+                            BookDetailsAction.SaveBook(book)
                         )
                 }
             )
