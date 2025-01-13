@@ -66,6 +66,10 @@ abstract class BaseViewModel<T> : ViewModel() {
         }
     }
 
+    fun emitLoading(){
+        _state.value = ScreenState.Loading
+    }
+
     companion object {
         private const val EMISSION_DELAY = 3000L
     }

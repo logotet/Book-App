@@ -96,6 +96,7 @@ class BookListViewModel(
                 .debounce(DEBOUNCE_QUERY_TIME)
                 .distinctUntilChanged()
                 .onEach { query ->
+                    emitLoading()
                     getBooks(query)
                 }
                 .stateIn(viewModelScope)
@@ -121,7 +122,6 @@ class BookListViewModel(
     }
 
     private fun toggleTab() {
-        _state.value = ScreenState.Loading
         when (_tabState.value) {
             TabState.ALL_BOOKS -> _tabState.value = TabState.FAVORITE_BOOKS
             TabState.FAVORITE_BOOKS -> _tabState.value = TabState.ALL_BOOKS
