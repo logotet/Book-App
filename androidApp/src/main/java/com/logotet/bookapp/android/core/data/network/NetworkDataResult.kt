@@ -14,12 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 
-suspend inline fun <reified Data> makeRequest(
+inline fun <reified Data> makeRequest(
     crossinline execute: suspend () -> HttpResponse
 ): Flow<DataResult<Data, DataError.Remote>> {
     return flow {
-        emit(DataResult.Loading)
-
         val result = try {
             val response = execute()
             val body = response.body<Data>()

@@ -9,7 +9,6 @@ fun <Fetched, Local> Flow<DataResult<Fetched, DataError>>.mapSuccess(
 ): Flow<DataResult<Local, DataError>> =
     map { result ->
         when (result) {
-            is DataResult.Loading -> result
             is DataResult.Success<Fetched> -> {
                 try {
                     DataResult.Success(convert(result.data))

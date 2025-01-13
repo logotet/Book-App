@@ -8,8 +8,6 @@ suspend inline fun <reified Data, Action : DatabaseAction> makeLocalRequest(
     crossinline execute: suspend () -> DataResult<Data, DataError.Local>
 ): Flow<DataResult<Data, DataError.Local>> =
     flow {
-        emit(DataResult.Loading)
-
         val result = try {
             execute()
         } catch (throwable: Throwable) {
