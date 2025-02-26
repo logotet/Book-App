@@ -23,9 +23,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import bookapp.composeapp.generated.resources.Res
+import bookapp.composeapp.generated.resources.image_book_cover_placeholder
 import com.logotet.bookapp.book.presentation.common.RatingText
 import com.logotet.bookapp.core.presentation.theme.AppTheme
 import com.logotet.bookapp.core.presentation.theme.Dimensions
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val cardHeight = 100.dp
@@ -102,12 +105,12 @@ fun BookListItemCard(
 @Composable
 fun BookListItemPreview() {
     AppTheme {
-//        BookListItemCard(
-//            bookTitle = "Harry Potter",
-//            authorName = "J.K. Rowling",
-//            bookRating = "4.3",
-//            bookCoverPainter = painterResource(R.drawable.image_book_cover_placeholder),
-//            navigate = {}
-//        )
+        BookListItemCard(
+            bookTitle = "Harry Potter",
+            authorName = "J.K. Rowling",
+            bookRating = "4.3",
+            bookCoverPainter = painterResource(Res.drawable.image_book_cover_placeholder),
+            navigate = {}
+        )
     }
 }

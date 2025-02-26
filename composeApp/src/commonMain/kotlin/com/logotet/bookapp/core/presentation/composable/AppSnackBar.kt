@@ -17,8 +17,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import bookapp.composeapp.generated.resources.Res
+import bookapp.composeapp.generated.resources.action_cancel
+import bookapp.composeapp.generated.resources.action_retry
 import com.logotet.bookapp.core.presentation.theme.Dimensions
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -52,10 +56,8 @@ fun AppSnackbar(
 @Composable
 private fun CustomSnackbar(
     snackbarData: SnackbarData,
-//    @StringRes cancelButtonTextId: Int = R.string.action_cancel,
-//    @StringRes actionButtonTextId: Int = R.string.action_retry,
-    cancelButtonTextId: Int = 1,
-    actionButtonTextId: Int = 1,
+    cancelButtonTextId: StringResource = Res.string.action_cancel,
+    actionButtonTextId: StringResource = Res.string.action_retry,
     withTwoButtons: Boolean = false,
     onConfirm: () -> Unit,
     onCancel: () -> Unit
@@ -78,7 +80,7 @@ private fun CustomSnackbar(
             ) {
                 TextButton(onClick = onCancel) {
                     val cancelButtonUpperCaseString =
-                       " stringResource(id = cancelButtonTextId).uppercase()"
+                        stringResource(cancelButtonTextId).uppercase()
 
                     Text(cancelButtonUpperCaseString)
                 }
@@ -92,7 +94,7 @@ private fun CustomSnackbar(
                     TextButton(onClick = onConfirm) {
                         val confirmButtonText =
                             snackbarData.visuals.actionLabel
-                                ?: "stringResource(id = actionButtonTextId)"
+                                ?: stringResource(actionButtonTextId)
 
                         Text(confirmButtonText)
                     }

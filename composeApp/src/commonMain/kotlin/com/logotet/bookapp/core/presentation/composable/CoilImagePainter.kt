@@ -6,15 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import bookapp.composeapp.generated.resources.Res
+import bookapp.composeapp.generated.resources.image_book_cover_placeholder
 import coil3.compose.rememberAsyncImagePainter
-import com.logotet.bookapp.android.R
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun rememberCoilImagePainter(
     imageUrl: String,
-    placeholder: Int = R.drawable.image_book_cover_placeholder
+    placeholder: DrawableResource = Res.drawable.image_book_cover_placeholder
 ): Painter {
     var imageLoadResult by remember {
         mutableStateOf<Result<Painter>?>(null)

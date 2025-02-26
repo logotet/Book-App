@@ -15,8 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
-import com.logotet.bookapp.android.R
+import bookapp.composeapp.generated.resources.Res
+import bookapp.composeapp.generated.resources.no_books_message
+import bookapp.composeapp.generated.resources.tab_book_list_all
+import bookapp.composeapp.generated.resources.tab_book_list_favorite
 import com.logotet.bookapp.book.domain.model.Book
 import com.logotet.bookapp.book.presentation.list.composables.BookListItemCard
 import com.logotet.bookapp.book.presentation.list.composables.SearchBar
@@ -25,6 +27,7 @@ import com.logotet.bookapp.core.presentation.composable.ScreenScaffold
 import com.logotet.bookapp.core.presentation.composable.rememberCoilImagePainter
 import com.logotet.bookapp.core.presentation.state.ScreenState
 import com.logotet.bookapp.core.presentation.theme.Dimensions
+import org.jetbrains.compose.resources.stringResource
 
 private const val EMPTY_STRING = ""
 
@@ -76,8 +79,8 @@ fun BookListContent(
     navigateToBookDetails: (String) -> Unit,
 ) {
     val tabsTitles = listOf(
-        stringResource(id = R.string.tab_book_list_all),
-        stringResource(id = R.string.tab_book_list_favorite)
+        stringResource(Res.string.tab_book_list_all),
+        stringResource(Res.string.tab_book_list_favorite)
     )
 
     Column(
@@ -118,7 +121,7 @@ fun BookListContent(
                         .background(MaterialTheme.colorScheme.primaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = stringResource(R.string.no_books_message))
+                    Text(text = stringResource(Res.string.no_books_message))
                 }
             } else {
                 LazyColumn(

@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.logotet.bookapp.core.presentation.BaseViewModel
 import com.logotet.bookapp.core.presentation.state.Event
 import com.logotet.bookapp.core.presentation.state.ScreenState
+import com.logotet.bookapp.core.presentation.utils.asString
 
 @Composable
 fun <T : Any> ScreenScaffold(
@@ -46,7 +47,7 @@ fun <T : Any> ScreenScaffold(
                 baseViewModel.event.collect { event ->
                     when (event) {
                         is Event.ShowError -> {
-//                            snackbarHostState.showSnackbar(event.error.asString(context))
+//                            snackbarHostState.showSnackbar(event.error.asString())
                         }
                     }
                 }

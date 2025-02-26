@@ -19,6 +19,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import bookapp.composeapp.generated.resources.Res
+import bookapp.composeapp.generated.resources.header_languages
+import bookapp.composeapp.generated.resources.header_pages
+import bookapp.composeapp.generated.resources.header_rating
+import bookapp.composeapp.generated.resources.header_synopsis
 import com.logotet.bookapp.book.domain.model.Book
 import com.logotet.bookapp.book.domain.model.BookDetails
 import com.logotet.bookapp.book.domain.model.BookWithDetails
@@ -109,15 +114,15 @@ fun BookDetailsContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimensions.Spacing.medium)
         ) {
-//            val bookPainter = rememberCoilImagePainter(bookCoverUrl)
-//
-//            BookCoverImage(
-//                painter = bookPainter,
-//                isSaved = isSaved,
-//                onHeartClick = { isSaved ->
-//                    setBookFavoriteStatus(isSaved)
-//                }
-//            )
+            val bookPainter = rememberCoilImagePainter(bookCoverUrl)
+
+            BookCoverImage(
+                painter = bookPainter,
+                isSaved = isSaved,
+                onHeartClick = {isSaved ->
+                    setBookFavoriteStatus(isSaved)
+                }
+            )
 
             Text(
                 text = bookTitle,
@@ -134,19 +139,19 @@ fun BookDetailsContent(
                 horizontalArrangement = Arrangement.Center
             ) {
                 HeaderWithChip(
-                    headerText = "stringResource(R.string.header_rating)",
+                    headerText = stringResource(Res.string.header_rating),
                     infoText = bookRating
                 )
 
                 HeaderWithChip(
-                    headerText = "stringResource(R.string.header_pages)",
+                    headerText = stringResource(Res.string.header_pages),
                     infoText = bookPages
                 )
             }
         }
 
         if (bookLanguages.isNotEmpty()) {
-            HeaderText(text = "stringResource(R.string.header_languages)")
+            HeaderText(text = stringResource(Res.string.header_languages))
 
             FlowRow(
                 horizontalArrangement = Arrangement.Center,
@@ -161,7 +166,7 @@ fun BookDetailsContent(
         }
 
         description?.let { bookDescription ->
-            HeaderText(text = "stringResource(R.string.header_synopsis)")
+            HeaderText(text = stringResource(Res.string.header_synopsis))
 
             Text(
                 text = bookDescription,

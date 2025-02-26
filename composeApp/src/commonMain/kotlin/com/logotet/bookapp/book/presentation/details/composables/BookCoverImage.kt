@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import bookapp.composeapp.generated.resources.Res
+import bookapp.composeapp.generated.resources.image_book_cover_placeholder
 import com.logotet.bookapp.core.presentation.theme.AppTheme
 import com.logotet.bookapp.core.presentation.theme.Dimensions
 import org.jetbrains.compose.resources.painterResource
@@ -63,14 +65,14 @@ fun BookCoverImage(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun BookCoverImagePreview() {
-//    AppTheme {
-//        BookCoverImage(
-//            painter = painterResource(R.drawable.image_book_cover_placeholder),
-//            isSaved = false,
-//            onHeartClick = {}
-//        )
-//    }
-//}
+@Preview
+@Composable
+fun BookCoverImagePreview() {
+    AppTheme {
+        BookCoverImage(
+            painter = painterResource(Res.drawable.image_book_cover_placeholder),
+            isSaved = false,
+            onHeartClick = {}
+        )
+    }
+}
