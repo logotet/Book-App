@@ -6,71 +6,29 @@ import com.logotet.bookapp.book.data.local.BookDatabase
 import com.logotet.bookapp.book.data.local.BookDatabaseFactory
 import com.logotet.bookapp.book.data.local.LocalBookDataSource
 import com.logotet.bookapp.book.data.local.RoomLocalBookDataSource
+import com.logotet.bookapp.book.data.network.HttpClientFactory
 import com.logotet.bookapp.book.data.network.KtorRemoteBookDataSource
 import com.logotet.bookapp.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.book.domain.BookRepository
 import com.logotet.bookapp.book.presentation.details.BookDetailsViewModel
 import com.logotet.bookapp.book.presentation.list.BookListViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-private const val HTTP_LOGGER_TAG = "KTOR"
-private const val TIMEOUT_MILLIS = 30000L
-
 expect val platformModule: Module
 
-val appModule = module {
+val sharedModule = module {
+    single<HttpClient> { HttpClientFactory.create(get()) }
+
+    singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
+
     viewModelOf(::BookListViewModel)
     viewModelOf(::BookDetailsViewModel)
     singleOf(::DefaultBookRepository).bind<BookRepository>()
-}
-
-val networkModule = module {
-    single {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(
-                    Json {
-                        explicitNulls = false
-                        prettyPrint = true
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                    }
-                )
-            }
-
-            install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        Log.i(HTTP_LOGGER_TAG, message)
-                    }
-                }
-
-                level = LogLevel.ALL
-            }
-
-            install(HttpTimeout) {
-                connectTimeoutMillis = TIMEOUT_MILLIS
-                socketTimeoutMillis = TIMEOUT_MILLIS
-                requestTimeoutMillis = TIMEOUT_MILLIS
-            }
-
-            expectSuccess = true // throw exception when status code is not >=200 && <300
-        }
-    }
-
-    singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
 }
 
 val databaseModule = module {
