@@ -12,13 +12,13 @@ interface BookDao {
     suspend fun insertBook(book: BookEntity): Long
 
     @Query("SELECT * FROM books")
-    fun getAllBooks(): List<BookEntity>
+    suspend fun getAllBooks(): List<BookEntity>
 
     @Query("SELECT * FROM books WHERE id = :id")
-    fun getBookById(id: String): BookEntity?
+    suspend fun getBookById(id: String): BookEntity?
 
     @Query("SELECT * FROM books WHERE title LIKE '%' || :title || '%'")
-    fun getBooksByTittle(title: String):List<BookEntity>
+    suspend fun getBooksByTittle(title: String): List<BookEntity>
 
     @Query("DELETE FROM books WHERE id = :id")
     suspend fun deleteBookById(id: String)
