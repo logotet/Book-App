@@ -3,8 +3,7 @@ package com.logotet.bookapp.di
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.logotet.bookapp.book.data.DefaultBookRepository
 import com.logotet.bookapp.book.data.local.BookDatabase
-import com.logotet.bookapp.book.data.local.BookDatabaseFactory
-import com.logotet.bookapp.book.data.local.LocalBookDataSource
+import com.logotet.bookapp.book.data.local.DatabaseFactory
 import com.logotet.bookapp.book.data.local.RoomLocalBookDataSource
 import com.logotet.bookapp.book.data.network.HttpClientFactory
 import com.logotet.bookapp.book.data.network.KtorRemoteBookDataSource
@@ -26,23 +25,18 @@ val sharedModule = module {
 
     singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
 
-    viewModelOf(::BookListViewModel)
-    viewModelOf(::BookDetailsViewModel)
-    singleOf(::DefaultBookRepository).bind<BookRepository>()
-}
-
-val databaseModule = module {
     single {
-        get<BookDatabase>().bookDao
-    }
-
-    single {
-        BookDatabaseFactory(androidContext()).create()
+        get<DatabaseFactory>().create()
             .setDriver(BundledSQLiteDriver())
             .build()
     }
+    single { get<BookDatabase>().bookDao }
 
     single {
         RoomLocalBookDataSource(get())
-    }.bind<LocalBookDataSource>()
+    }
+
+    viewModelOf(::BookListViewModel)
+    viewModelOf(::BookDetailsViewModel)
+    singleOf(::DefaultBookRepository).bind<BookRepository>()
 }
