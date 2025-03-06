@@ -9,7 +9,7 @@ import com.logotet.bookapp.book.data.network.mapper.toBookList
 import com.logotet.bookapp.book.domain.BookRepository
 import com.logotet.bookapp.book.domain.model.Book
 import com.logotet.bookapp.book.domain.model.BookWithDetails
-import com.logotet.bookapp.core.domain.result.DataError
+import com.logotet.bookapp.core.domain.result.AppError
 import com.logotet.bookapp.core.domain.result.DataResult
 import com.logotet.bookapp.core.domain.result.mapSuccess
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ class DefaultBookRepository(
 
     override suspend fun getBooksList(
         query: String
-    ): Flow<DataResult<List<Book>, DataError>> =
+    ): Flow<DataResult<List<Book>, AppError>> =
         remoteBookDataSource.searchBooks(query)
             .mapSuccess { bookItemsDto ->
                 val bookList = bookItemsDto.toBookList()
@@ -41,7 +41,7 @@ class DefaultBookRepository(
     override suspend fun getBookDetails(
         bookId: String,
         isSaved: Boolean
-    ): Flow<DataResult<BookWithDetails, DataError>> =
+    ): Flow<DataResult<BookWithDetails, AppError>> =
         remoteBookDataSource.getBookDetails(bookId)
             .mapSuccess { bookDetailsDto ->
                 val bookDetails = bookDetailsDto.toBookDetails()
@@ -57,31 +57,31 @@ class DefaultBookRepository(
 
     override suspend fun insertFavoriteBook(
         book: Book
-    ): Flow<DataResult<Unit, DataError>> =
+    ): Flow<DataResult<Unit, AppError>> =
         localBookDataSource.insertBook(book.toBookEntity())
             .flowOn(Dispatchers.IO)
 
     override suspend fun removeBookFromFavorites(
         bookId: String
-    ): Flow<DataResult<Unit, DataError>> =
+    ): Flow<DataResult<Unit, AppError>> =
         localBookDataSource.deleteBook(bookId)
             .flowOn(Dispatchers.IO)
 
     override suspend fun isFavoriteBook(
         bookId: String
-    ): Flow<DataResult<Boolean, DataError>> =
+    ): Flow<DataResult<Boolean, AppError>> =
         localBookDataSource.getBookById(bookId).mapSuccess { bookEntity ->
             bookEntity?.let { true } ?: false
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun getFavoriteBooksByTitle(title: String): Flow<DataResult<List<Book>, DataError>> =
+    override suspend fun getFavoriteBooksByTitle(title: String): Flow<DataResult<List<Book>, AppError>> =
         localBookDataSource.getBooksByQuery(query = title).mapSuccess { bookEntityList ->
             bookEntityList.map { bookEntity ->
                 bookEntity.toBook()
             }
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun getAllFavoriteBooks(): Flow<DataResult<List<Book>, DataError>> =
+    override suspend fun getAllFavoriteBooks(): Flow<DataResult<List<Book>, AppError>> =
         localBookDataSource.getAllBooks().mapSuccess { bookEntityList ->
             val favoriteBooks = bookEntityList.map { bookEntity ->
                 bookEntity.toBook()

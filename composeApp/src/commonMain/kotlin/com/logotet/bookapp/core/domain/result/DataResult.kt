@@ -6,25 +6,23 @@ sealed interface DataResult<out D, out E : AppError> {
         DataResult<Nothing, E>
 }
 
-sealed class DataError(val throwable: Throwable?) : AppError {
-    sealed class Remote(throwable: Throwable?) : DataError(throwable) {
-        class Redirect(throwable: Throwable?) : Remote(throwable)
-        class BadRequest(throwable: Throwable?) : Remote(throwable)
-        class Server(throwable: Throwable?) : Remote(throwable)
-        class Unauthorized(throwable: Throwable?) : Remote(throwable)
-        class Forbidden(throwable: Throwable?) : Remote(throwable)
-        class NotFound(throwable: Throwable?) : Remote(throwable)
-        class MethodNotAllowed(throwable: Throwable?) : Remote(throwable)
-        class Timeout(throwable: Throwable?) : Remote(throwable)
-        class Serialization(throwable: Throwable?) : Remote(throwable)
-        class Unknown(throwable: Throwable? = null) : Remote(throwable)
-    }
+sealed interface Remote : AppError {
+    data object Redirect : Remote
+    data object BadRequest : Remote
+    data object Server : Remote
+    data object Unauthorized : Remote
+    data object Forbidden : Remote
+    data object NotFound : Remote
+    data object MethodNotAllowed : Remote
+    data object Timeout : Remote
+    data object Serialization : Remote
+    data object Unknown : Remote
+}
 
-    sealed class Local(throwable: Throwable?) : DataError(throwable) {
-        class Insert(throwable: Throwable?) : Local(throwable)
-        class Update(throwable: Throwable?) : Local(throwable)
-        class GetData(throwable: Throwable?) : Local(throwable)
-        class Delete(throwable: Throwable?) : Local(throwable)
-        class Unknown(throwable: Throwable? = null) : Local(throwable)
-    }
+sealed interface Local : AppError {
+    data object Insert : Local
+    data object Update : Local
+    data object GetData : Local
+    data object Delete : Local
+    data object Unknown : Local
 }

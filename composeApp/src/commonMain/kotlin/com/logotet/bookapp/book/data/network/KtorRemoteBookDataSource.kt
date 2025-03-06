@@ -3,8 +3,8 @@ package com.logotet.bookapp.book.data.network
 import com.logotet.bookapp.book.data.network.dto.BookDetailsDto
 import com.logotet.bookapp.book.data.network.dto.BookItemsDto
 import com.logotet.bookapp.core.data.network.makeRequest
-import com.logotet.bookapp.core.domain.result.DataError
 import com.logotet.bookapp.core.domain.result.DataResult
+import com.logotet.bookapp.core.domain.result.Remote
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -19,7 +19,7 @@ class KtorRemoteBookDataSource(
     override suspend fun searchBooks(
         query: String,
         resultLimit: Int?
-    ): Flow<DataResult<BookItemsDto, DataError.Remote>> =
+    ): Flow<DataResult<BookItemsDto, Remote>> =
         makeRequest<BookItemsDto> {
             httpClient.get(
                 urlString = "$BASE_URL/search.json"
@@ -36,7 +36,7 @@ class KtorRemoteBookDataSource(
 
     override suspend fun getBookDetails(
         bookWorkId: String
-    ): Flow<DataResult<BookDetailsDto, DataError.Remote>> =
+    ): Flow<DataResult<BookDetailsDto, Remote>> =
         makeRequest<BookDetailsDto> {
             httpClient.get(
                 urlString = "$BASE_URL/works/$bookWorkId.json"

@@ -4,16 +4,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
-fun <Fetched, Local> Flow<DataResult<Fetched, DataError>>.mapSuccess(
+fun <Fetched, Local> Flow<DataResult<Fetched, AppError>>.mapSuccess(
     convert: suspend (Fetched) -> Local
-): Flow<DataResult<Local, DataError>> =
+): Flow<DataResult<Local, AppError>> =
     map { result ->
         when (result) {
             is DataResult.Success<Fetched> -> {
                 try {
                     DataResult.Success(convert(result.data))
                 } catch (e: Exception) {
-                    DataResult.Error(DataError.Local.Unknown())
+                    DataResult.Error(com.logotet.bookapp.core.domain.result.Local.Unknown)
                 }
             }
 
@@ -23,7 +23,7 @@ fun <Fetched, Local> Flow<DataResult<Fetched, DataError>>.mapSuccess(
         }
     }
 
-suspend fun <Data> Flow<DataResult<Data, DataError>>.onSuccess(
+suspend fun <Data> Flow<DataResult<Data, AppError>>.onSuccess(
     action: (Data) -> Unit
 ) {
     collectLatest { result ->

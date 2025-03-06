@@ -3,7 +3,6 @@ package com.logotet.bookapp.core.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.core.domain.result.AppError
-import com.logotet.bookapp.core.domain.result.DataError
 import com.logotet.bookapp.core.domain.result.DataResult
 import com.logotet.bookapp.core.presentation.state.Event
 import com.logotet.bookapp.core.presentation.state.ScreenState
@@ -33,7 +32,7 @@ abstract class BaseViewModel<T> : ViewModel() {
 
     abstract fun getData()
 
-    fun DataResult<T, DataError>.handleResult(
+    fun DataResult<T, AppError>.handleResult(
         onSuccess: (T) -> Unit = {},
         onError: (AppError) -> Unit = {},
     ) {
