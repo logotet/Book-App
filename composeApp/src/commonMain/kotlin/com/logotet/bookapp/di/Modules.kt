@@ -12,6 +12,7 @@ import com.logotet.bookapp.book.data.network.RemoteBookDataSource
 import com.logotet.bookapp.book.domain.BookRepository
 import com.logotet.bookapp.book.presentation.details.BookDetailsViewModel
 import com.logotet.bookapp.book.presentation.list.BookListViewModel
+import com.logotet.bookapp.core.data.network.KtorClient
 import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -31,6 +32,7 @@ val sharedModule = module {
     }
     single { get<BookDatabase>().bookDao }
 
+    singleOf(::KtorClient)
     singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
     singleOf(::RoomLocalBookDataSource).bind<LocalBookDataSource>()
 
