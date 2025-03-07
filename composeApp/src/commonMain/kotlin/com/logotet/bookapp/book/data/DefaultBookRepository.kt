@@ -15,6 +15,7 @@ import com.logotet.bookapp.core.domain.result.mapSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 
 class DefaultBookRepository(
@@ -27,15 +28,19 @@ class DefaultBookRepository(
     override suspend fun getBooksList(
         query: String
     ): Flow<DataResult<List<Book>, AppError>> =
-        remoteBookDataSource.searchBooks(query)
-            .mapSuccess { bookItemsDto ->
-                val bookList = bookItemsDto.toBookList()
+        if (query.isNotBlank()) {
+            remoteBookDataSource.searchBooks(query)
+                .mapSuccess { bookItemsDto ->
+                    val bookList = bookItemsDto.toBookList()
 
-                bookListRemoteCache.clear()
-                bookListRemoteCache.addAll(bookList)
+                    bookListRemoteCache.clear()
+                    bookListRemoteCache.addAll(bookList)
 
-                bookList
-            }
+                    bookList
+                }
+        } else {
+            flowOf(DataResult.Success(emptyList()))
+        }
             .flowOn(Dispatchers.IO)
 
     override suspend fun getBookDetails(

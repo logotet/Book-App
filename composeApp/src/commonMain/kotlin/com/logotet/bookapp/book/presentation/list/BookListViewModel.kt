@@ -63,6 +63,7 @@ class BookListViewModel(
     }
 
     private fun getBooks(query: String = EMPTY_QUERY) {
+        startLoading()
         when (_tabState.value) {
             ALL_BOOKS -> getBooksByQuery(query)
             FAVORITE_BOOKS ->
@@ -74,14 +75,11 @@ class BookListViewModel(
     }
 
     private fun getFavoriteBooksByQuery(query: String) {
-        if (query.isNotBlank()) {
-            startLoading()
-            viewModelScope.launch {
-                bookRepository.getFavoriteBooksByTitle(query)
-                    .collectLatest { result ->
-                        result.handleResult()
-                    }
-            }
+        viewModelScope.launch {
+            bookRepository.getFavoriteBooksByTitle(query)
+                .collectLatest { result ->
+                    result.handleResult()
+                }
         }
     }
 
@@ -98,19 +96,15 @@ class BookListViewModel(
     }
 
     private fun getBooksByQuery(query: String) {
-        if (query.isNotBlank()) {
-            startLoading()
-            viewModelScope.launch {
-                bookRepository.getBooksList(query)
-                    .collectLatest { result ->
-                        result.handleResult()
-                    }
-            }
+        viewModelScope.launch {
+            bookRepository.getBooksList(query)
+                .collectLatest { result ->
+                    result.handleResult()
+                }
         }
     }
 
     private fun getFavoriteBooks() {
-        startLoading()
         viewModelScope.launch {
             bookRepository.getAllFavoriteBooks()
                 .collectLatest { result ->
