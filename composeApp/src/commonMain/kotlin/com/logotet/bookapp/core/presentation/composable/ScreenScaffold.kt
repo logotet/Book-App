@@ -12,14 +12,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.logotet.bookapp.core.presentation.BaseViewModel
 import com.logotet.bookapp.core.presentation.state.Event
 import com.logotet.bookapp.core.presentation.state.ScreenState
 import com.logotet.bookapp.core.presentation.utils.asString
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun <T : Any> ScreenScaffold(
@@ -29,12 +34,27 @@ fun <T : Any> ScreenScaffold(
     content: @Composable BoxScope.(T?) -> Unit,
 ) {
     val viewLifecycleOwner = LocalLifecycleOwner.current
-//    val context = LocalContext.current
 
     val uiState by baseViewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     var data: T? by remember { mutableStateOf(null) }
+
+    var errorMessageResource: StringResource? by remember {
+        mutableStateOf(null)
+    }
+
+    val rememberCoroutineScope = rememberCoroutineScope()
+
+    // consider using separate string resource management for each platform
+    errorMessageResource?.let {
+        val errorMessage = stringResource(it)
+
+        rememberCoroutineScope.launch {
+            snackbarHostState.showSnackbar(errorMessage)
+            errorMessageResource = null
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -43,14 +63,15 @@ fun <T : Any> ScreenScaffold(
     ) { padding ->
 
         LaunchedEffect(viewLifecycleOwner.lifecycle) {
-            if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.STARTED)
+            withContext(Dispatchers.Main.immediate) {
                 baseViewModel.event.collect { event ->
                     when (event) {
                         is Event.ShowError -> {
-//                            snackbarHostState.showSnackbar(event.error.asString())
+                            errorMessageResource = event.error.asString()
                         }
                     }
                 }
+            }
         }
 
         Box(
