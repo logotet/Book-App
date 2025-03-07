@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 
 abstract class BaseViewModel<T> : ViewModel() {
     protected val _state: MutableStateFlow<ScreenState<T>> =
-        MutableStateFlow(ScreenState.Loading)
+        MutableStateFlow(ScreenState.Idle)
     val state: StateFlow<ScreenState<T>> = _state
         .onStart {
             getData()
@@ -24,7 +24,7 @@ abstract class BaseViewModel<T> : ViewModel() {
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(EMISSION_DELAY),
-            initialValue = ScreenState.Loading
+            initialValue = ScreenState.Idle
         )
 
     protected val _event = Channel<Event>()
@@ -43,6 +43,7 @@ abstract class BaseViewModel<T> : ViewModel() {
             }
 
             is DataResult.Error -> {
+                _state.value = ScreenState.Idle
                 _event.trySend(Event.ShowError(result.error))
                 onError(result.error)
             }
@@ -57,7 +58,7 @@ abstract class BaseViewModel<T> : ViewModel() {
         }
     }
 
-    fun emitLoading(){
+    fun startLoading() {
         _state.value = ScreenState.Loading
     }
 

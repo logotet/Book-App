@@ -24,7 +24,8 @@ class BookDetailsViewModel(
     private val _isSaved: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isSaved = _isSaved.asStateFlow()
 
-    fun getBookDetails(bookId: String) {
+    private fun getBookDetails(bookId: String) {
+        startLoading()
         viewModelScope.launch {
             bookRepository.isFavoriteBook(bookId).collectLatest { isFavoriteResult ->
                 if (isFavoriteResult is DataResult.Success) {

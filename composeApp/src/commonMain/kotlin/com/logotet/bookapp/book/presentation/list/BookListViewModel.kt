@@ -3,9 +3,12 @@ package com.logotet.bookapp.book.presentation.list
 import androidx.lifecycle.viewModelScope
 import com.logotet.bookapp.book.domain.BookRepository
 import com.logotet.bookapp.book.domain.model.Book
-import com.logotet.bookapp.book.presentation.list.BookListScreenAction.*
-import com.logotet.bookapp.book.presentation.list.BookListScreenEvent.*
-import com.logotet.bookapp.book.presentation.list.TabState.*
+import com.logotet.bookapp.book.presentation.list.BookListScreenAction.DismissSearch
+import com.logotet.bookapp.book.presentation.list.BookListScreenAction.Search
+import com.logotet.bookapp.book.presentation.list.BookListScreenAction.TabChange
+import com.logotet.bookapp.book.presentation.list.BookListScreenEvent.ClearQuery
+import com.logotet.bookapp.book.presentation.list.TabState.ALL_BOOKS
+import com.logotet.bookapp.book.presentation.list.TabState.FAVORITE_BOOKS
 import com.logotet.bookapp.core.presentation.BaseViewModel
 import com.logotet.bookapp.core.presentation.state.ScreenState
 import kotlinx.coroutines.FlowPreview
@@ -71,11 +74,14 @@ class BookListViewModel(
     }
 
     private fun getFavoriteBooksByQuery(query: String) {
-        viewModelScope.launch {
-            bookRepository.getFavoriteBooksByTitle(query)
-                .collectLatest { result ->
-                    result.handleResult()
-                }
+        if (query.isNotBlank()) {
+            startLoading()
+            viewModelScope.launch {
+                bookRepository.getFavoriteBooksByTitle(query)
+                    .collectLatest { result ->
+                        result.handleResult()
+                    }
+            }
         }
     }
 
@@ -85,7 +91,6 @@ class BookListViewModel(
                 .debounce(DEBOUNCE_QUERY_TIME)
                 .distinctUntilChanged()
                 .onEach { query ->
-                    emitLoading()
                     getBooks(query)
                 }
                 .stateIn(viewModelScope)
@@ -93,15 +98,19 @@ class BookListViewModel(
     }
 
     private fun getBooksByQuery(query: String) {
-        viewModelScope.launch {
-            bookRepository.getBooksList(query)
-                .collectLatest { result ->
-                    result.handleResult()
-                }
+        if (query.isNotBlank()) {
+            startLoading()
+            viewModelScope.launch {
+                bookRepository.getBooksList(query)
+                    .collectLatest { result ->
+                        result.handleResult()
+                    }
+            }
         }
     }
 
     private fun getFavoriteBooks() {
+        startLoading()
         viewModelScope.launch {
             bookRepository.getAllFavoriteBooks()
                 .collectLatest { result ->
