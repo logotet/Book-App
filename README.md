@@ -1,14 +1,57 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
+Book Info App (Kotlin Multiplatform)
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+📖 Overview
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Book Info App is a Kotlin Multiplatform (KMP) application that provides book details from an API. The app runs on Android, Desktop and iOS, sharing business logic while using platform-specific UI implementations.
+
+📌 Features
+
+✅ Search for books by title or author 
+
+✅ View book details (description, rating, cover image)
+
+✅ Save books to favorites (local database using Room)
+
+✅ Works on Android, Desktp & iOS with shared business logic
 
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+🛠️ Tech Stack
+
+Kotlin Multiplatform (KMP) - Shared business logic
+
+Jetpack Compose - UI for Android
+
+Ktor Client - Networking
+
+Room - Local database
+
+Coil - Image loading
+
+Kotlinx Serialization - JSON parsing
+
+🚀 Getting Started
+
+Prerequisites
+
+Android Studio (for Android development)
+
+Xcode (for iOS development)
+
+Kotlin Multiplatform Plugin
+
+Build & Run
+
+Android
+
+./gradlew androidApp:installDebug
+
+iOS
+
+cd iosApp && pod install
+open iosApp.xcworkspace
+
+Run the app via Xcode on an iOS simulator or device.
+
+Desktop
+
+./gradlew run
