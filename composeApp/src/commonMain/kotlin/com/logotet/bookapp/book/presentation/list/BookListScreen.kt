@@ -36,20 +36,13 @@ fun BookListScreen(
     viewModel: BookListViewModel,
     navigateToBookDetails: (String) -> Unit
 ) {
-    val bookListState by viewModel.state.collectAsState()
     val tabState by viewModel.tabState.collectAsState()
     val query by viewModel.queryState.collectAsState()
 
     ScreenScaffold(baseViewModel = viewModel) { bookList ->
-        val books =
-            if (bookListState is ScreenState.Idle) {
-                emptyList()
-            } else {
-                bookList
-            }
 
         BookListContent(
-            books = books ?: emptyList(),
+            books = bookList ?: emptyList(),
             initialQuery = query,
             selectedTabIndex = tabState.ordinal,
             onSearch = { query ->

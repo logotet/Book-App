@@ -44,7 +44,6 @@ fun BookDetailsScreen(
     viewModel: BookDetailsViewModel,
     navigateBack: () -> Unit
 ) {
-    val bookDetailsState by viewModel.state.collectAsState()
     val isSaved by viewModel.isSaved.collectAsState()
 
     ScreenScaffold(baseViewModel = viewModel,
@@ -119,7 +118,7 @@ fun BookDetailsContent(
             BookCoverImage(
                 painter = bookPainter,
                 isSaved = isSaved,
-                onHeartClick = {isSaved ->
+                onHeartClick = { isSaved ->
                     setBookFavoriteStatus(isSaved)
                 }
             )
